@@ -1,0 +1,16 @@
+version: "5.0"
+
+services:
+  cassandra:
+    image: cassandra:5.0
+    command: ["cassandra", "-f", "-Dcassandra.config=/etc/cassandra/cassandra-custom.yaml"]
+    ports:
+      - "7199:7199"
+      - "7001:7001"
+      - "9042:9042"
+    volumes:
+      - "./cassandra_fql:/cassandra-fql"
+      - type: bind
+        source: ./cassandra_docker.yaml
+        target: /etc/cassandra/cassandra-custom.yaml
+      - "./cassandra_db:/var/lib/cassandra"
