@@ -31,6 +31,6 @@ cassandra/saved_caches/
 .vscode/
 
 # Arquivos do Docker (se aplicável)
-cassandra/Dockerfile
-cassandra/docker-compose.override.yml
+cassandra_docker.yaml
+docker-compose.yaml
 
