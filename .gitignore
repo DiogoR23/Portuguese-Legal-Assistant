@@ -1,0 +1,36 @@
+# Arquivos do Python
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyo
+*.log
+
+# Arquivos do Poetry e Pip
+poetry.lock
+.env
+.venv/
+
+# Logs e Arquivos Temporários
+*.log
+*.tmp
+*.swp
+.DS_Store
+*.bak
+
+# Playwright (Web Scraping)
+playwright/.cache/
+playwright/.local-browsers/
+
+# Arquivos do Cassandra
+cassandra/data/
+cassandra/commitlog/
+cassandra/saved_caches/
+
+# Arquivos do VSCode
+.vscode/
+
+# Arquivos do Docker (se aplicável)
+cassandra/Dockerfile
+cassandra/docker-compose.override.yml
+
