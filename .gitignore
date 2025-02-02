@@ -33,4 +33,6 @@ cassandra/saved_caches/
 # Arquivos do Docker (se aplicável)
 cassandra_docker.yaml
 docker-compose.yaml
+data/cassadra_db
+data/cassandra_fql
 
