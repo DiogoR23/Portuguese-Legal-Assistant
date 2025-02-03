@@ -4,11 +4,6 @@ import os
 import uuid
 
 
-def sanitize_string(input_string):
-    """Sanitizes the string by removing invalid Unicode characters."""
-    return input_string.encode('utf-8', 'ignore').decode('utf-8')
-
-
 def save_answer_question(input_history : list[str], answers_history : list[str], session):
     """
     Saves user input (questions) and AI responses to the corresponding keyspace table.
@@ -51,13 +46,12 @@ def save_answer_question(input_history : list[str], answers_history : list[str],
             if answer:
                 id_answers = uuid.uuid4()
 
-                sanitized_answer = sanitize_string(answer)
                 ai_query = """
                         INSERT INTO cassandra.ai_answers (id_answers, content_answers)
                         VALUES (%s, %s)
                         """
 
-                ai_batch.add(ai_query, (id_answers, sanitized_answer))
+                ai_batch.add(ai_query, id_answers)
         session.execute(ai_batch)
 
     except Exception as e:
@@ -70,13 +64,12 @@ def save_answer_question(input_history : list[str], answers_history : list[str],
             if user_input:
                 id_question = uuid.uuid4()
 
-                sanitized_question = sanitize_string(user_input)
                 user_query = """
                         INSERT INTO cassandra.user_questions (id_question, content_question)
                         VALUES (%s, %s)
                         """
 
-                user_batch.add(user_query, (id_question, sanitized_question))
+                user_batch.add(user_query, id_question)
         session.execute(user_batch)
 
     except Exception as e:
