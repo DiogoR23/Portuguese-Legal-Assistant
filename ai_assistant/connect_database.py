@@ -12,6 +12,7 @@ def connect_to_cassandra():
 
     return session
 
+
 def view_data(session, table):
     """Views data from a specific table and keyspace."""
     if session is None:
@@ -24,3 +25,28 @@ def view_data(session, table):
 
     for row in rows:
         print(row)
+
+
+def drop_table(session, table_name):
+    session.execute(f"DROP TABLE IF EXISTS cassandra.{table_name}")
+
+
+def clear_table(session, table_name):
+    """Clear the information of a specific Cassandra table."""
+    try:
+        session.execute(f"TRUNCATE cassandra.{table_name}")
+
+    except Exception as e:
+        print(f"Error cleaning table: {e}")
+
+
+def keyspace_remove(session, keyspace):
+    session.execute(f"DROP KEYSPACE {keyspace}")
+
+
+def check_table(session, keyspace, table):
+    """Show the columns for the corresponding keyspace table."""
+    
+    session.execute(f"DESCRIBE TABLE {keyspace}.{table}")
+
+
