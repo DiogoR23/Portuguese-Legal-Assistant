@@ -113,3 +113,6 @@ def main():
         if session:
             save_answer_question(answers_history=ai_answer, input_history=user_question, session=session)
             session.shutdown()
+
+if __name__ == "__main__":
+    main()
