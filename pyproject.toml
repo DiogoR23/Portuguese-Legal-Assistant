@@ -35,6 +35,7 @@ langchain-huggingface = "^0.0.3"
 text-generation = "^0.7.0"
 cassio = "^0.1.8"
 langchain-community = "^0.2.11"
+pyinstall = "*"
 
 [tool.poetry.scripts]
 scraper = "scraper.run_scraper:main"
