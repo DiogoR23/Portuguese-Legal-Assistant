@@ -1,4 +1,4 @@
-# Arquivos do Python
+# Python Files
 __pycache__/
 *.py[cod]
 *.so
@@ -6,12 +6,11 @@ __pycache__/
 *.pyo
 *.log
 
-# Arquivos do Poetry e Pip
+# Poetry and Pip Files
 poetry.lock
-.env
 .venv/
 
-# Logs e Arquivos Temporários
+# Logs and Temporary Fles
 *.log
 *.tmp
 *.swp
@@ -22,7 +21,7 @@ poetry.lock
 playwright/.cache/
 playwright/.local-browsers/
 
-# Arquivos do Cassandra
+# Cassandra Files
 cassandra_docker.yaml
 cassandra/data/
 cassandra/commitlog/
@@ -30,12 +29,12 @@ cassandra/saved_caches/
 cassandra_db
 cassandra_fql
 
-# Arquivos do VSCode
+# VSCode Files
 .vscode/
 
-# Arquivos do Docker
+# Docker Files
 docker-compose.yml
 
-# Arquivos do environment
+# Environment Files
 .env
 
