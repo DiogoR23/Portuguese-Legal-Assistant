@@ -8,10 +8,9 @@ class CassandraSession():
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-    def __init__(self, cluster, username, password):
+    def __init__(self, cluster, auth_provider):
         self.cluster = cluster
-        self.username = username
-        self.password = password
+        self.auth_provider = auth_provider
         # Try to complete the code, so that those functions enter in this class
         # Use ChatGPT or DeepSeek or Copilot to complete this class
 
