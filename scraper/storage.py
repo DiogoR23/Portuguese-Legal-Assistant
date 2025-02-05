@@ -1,12 +1,13 @@
-from cassandra.cluster import Cluster
-from cassandra.auth import PlainTextAuthProvider
-from cassandra.policies import DCAwareRoundRobinPolicy
-import logging
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
 class CassandraSession():
     """Class to get the access to the service where our Database is stored."""
+    from cassandra.cluster import Cluster
+    from cassandra.auth import PlainTextAuthProvider
+    from cassandra.policies import DCAwareRoundRobinPolicy
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
     def __init__(self, cluster, username, password):
         self.cluster = cluster
         self.username = username
