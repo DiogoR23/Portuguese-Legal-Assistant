@@ -48,7 +48,7 @@ def connect_to_cassandra_vstore(session):
 
 def main():
 # TODO: Setup Code
-    jarvis_color = "\033[36m"
+    ai_color = "\033[36m"
     reset_color = "\033[0m"
 
     ai_answer = []
@@ -89,7 +89,7 @@ def main():
         agent_executor = AgentExecutor(agent=agent, tools=tools)
 
         while True:
-            print(f"{jarvis_color}\n{'-'*15} Welcome, ask something to our newest jarvis.ai! Type 'q' to quit! {'-'*15}\n")
+            print(f"{ai_color}\n{'-'*15} Welcome, ask something to our newest PLaws.ai! Type 'q' to quit! {'-'*15}\n")
             user_input = input("-> ")
             print(f"\n{'-'*95}\n{reset_color}")
 
@@ -99,7 +99,7 @@ def main():
             result = agent_executor.invoke({"input": user_input, "agent_scratchpad": ""})
             response = result["output"]
 
-            print(f"{jarvis_color}\n{'-'*30} Jarvis Response {'-'*30}\n")
+            print(f"{ai_color}\n{'-'*30} Jarvis Response {'-'*30}\n")
             print(f"-> {response}")
             print(f"\n{'-'*75}\n{reset_color}")
 
