@@ -5,6 +5,15 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
+class CassandraSession():
+    """Class to get the access to the service where our Database is stored."""
+    def __init__(self, cluster, username, password):
+        self.cluster = cluster
+        self.username = username
+        self.password = password
+        # Try to complete the code, so that those functions enter in this class
+        # Use ChatGPT or DeepSeek or Copilot to complete this class
+
 
 def create_cassandra_session():
     """Connect to Cassandra and create the keyspace and table if they don't exist."""
