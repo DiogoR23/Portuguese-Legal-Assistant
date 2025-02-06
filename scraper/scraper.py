@@ -1,7 +1,6 @@
 from playwright.sync_api import sync_playwright
 import logging
 from scraper.extractor import extract_data_from_page, extract_links
-from scraper.storage import save_data_to_cassandra
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -23,7 +22,7 @@ def crawl_site(start_url, base_url, session):
             visited.add(current_url)
             data = extract_data_from_page(current_url, page)
             if data:
-                save_data_to_cassandra(session, [data])
+                session.save_data([data])
 
             page.goto(current_url)
             page.wait_for_timeout(5000)
