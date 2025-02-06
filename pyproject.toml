@@ -39,7 +39,7 @@ pyinstall = "*"
 flask = "^3.1.0"
 
 [tool.poetry.scripts]
-scraper = "scraper.run_scraper:main"
+dre = "scraper.run_scraper:main"
 chat = "ai_assistant.chatbot:main"
 
 [build-system]
