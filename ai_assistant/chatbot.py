@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 from langchain.tools.retriever import create_retriever_tool
-from ai_assistant.connect_database import connect_to_cassandra, view_data
+from ai_assistant.connect_database import connect_to_cassandra
 from ai_assistant.connect_database import save_answer_question
 from langchain_community.vectorstores import Cassandra
 from langchain_openai import OpenAIEmbeddings
