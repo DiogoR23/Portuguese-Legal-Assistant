@@ -37,6 +37,7 @@ cassio = "^0.1.8"
 langchain-community = "^0.2.11"
 pyinstall = "*"
 flask = "^3.1.0"
+django = "^5.1.6"
 
 [tool.poetry.scripts]
 scraper = "scraper.run_scraper:main"
