@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
+from ai_assistant.connect_cassandra_session import ConnectCassandraSession
 from ai_assistant.connect_database import connect_to_cassandra
-from ai_assistant.fetch_articles import save_answer_question
 from langchain.tools.retriever import create_retriever_tool
 from langchain_community.vectorstores import Cassandra
 from langchain_openai import OpenAIEmbeddings
@@ -10,13 +10,15 @@ from langchain_community.utilities.cassandra import SetupMode
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
-import json
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_URL = os.getenv("BASE_URL")
 CASSANDRA_KEYSPACE = os.getenv("CASSANDRA_KEYSPACE")
+USERNAME = os.getenv("CASSANDRA_USERNAME")
+PASSWORD = os.getenv("CASSANDRA_PASSWORD")
 
 
 def connect_to_cassandra_vstore(session):
@@ -55,7 +57,7 @@ def main():
     user_question = []
 
     try:
-        session = connect_to_cassandra()
+        session = ConnectCassandraSession(username=USERNAME, password=PASSWORD)
 
         vstore = connect_to_cassandra_vstore(session=session)
         retriever = vstore.as_retriever(search_kwargs={"k": 100})
@@ -111,8 +113,8 @@ def main():
 
     finally:
         if session:
-            save_answer_question(answers_history=ai_answer, input_history=user_question, session=session)
-            session.shutdown()
+            session.save_answers_question(answers_history=ai_answer, input_history=user_question)
+            session.close()
 
 if __name__ == "__main__":
     main()
