@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import os
-from ai_assistant.connect_cassandra_session import ConnectCassandraSession
-from ai_assistant.connect_database import connect_to_cassandra
 from langchain.tools.retriever import create_retriever_tool
+from ai_assistant.connect_database import connect_to_cassandra, view_data
+from ai_assistant.connect_database import save_answer_question
 from langchain_community.vectorstores import Cassandra
 from langchain_openai import OpenAIEmbeddings
 import logging
@@ -10,8 +10,6 @@ from langchain_community.utilities.cassandra import SetupMode
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -25,7 +23,8 @@ def connect_to_cassandra_vstore(session):
     """
     Create a Cassandra Vector Store from a session.
     """
-    logging.debug("Creating OpenAIEmbeddings...")
+    logging.info("Creating OpenAIEmbeddings...")
+
     embeddings = OpenAIEmbeddings(
         api_key=OPENAI_API_KEY,
         base_url=BASE_URL,
@@ -34,7 +33,7 @@ def connect_to_cassandra_vstore(session):
         dimensions=1024
     )
 
-    logging.debug("Creating Cassandra vector store...")
+    logging.info("Creating Cassandra vector store...")
     vstore = Cassandra(
         embedding=embeddings,
         session=session,
@@ -43,7 +42,7 @@ def connect_to_cassandra_vstore(session):
         setup_mode=SetupMode.SYNC
     )
 
-    logging.debug("Cassandra vector store created successfully.")
+    logging.info("Cassandra vector store created successfully.")
 
     return vstore
 
@@ -57,7 +56,7 @@ def main():
     user_question = []
 
     try:
-        session = ConnectCassandraSession(username=USERNAME, password=PASSWORD)
+        session = connect_to_cassandra()
 
         vstore = connect_to_cassandra_vstore(session=session)
         retriever = vstore.as_retriever(search_kwargs={"k": 100})
@@ -113,8 +112,8 @@ def main():
 
     finally:
         if session:
-            session.save_answers_question(answers_history=ai_answer, input_history=user_question)
-            session.close()
+            save_answer_question(session=session, input_history=user_question, answers_history=ai_answer)
+            session.shutdown()
 
 if __name__ == "__main__":
     main()
