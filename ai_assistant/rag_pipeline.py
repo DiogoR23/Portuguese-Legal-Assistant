@@ -1,6 +1,11 @@
 from langchain.tools.retriever import create_retriever_tool
+from langchain_community.retrievers import BM25Retriever
 import logging
 from cassandra.query import SimpleStatement
+
+
+# def retrive_laws(vstore, ):
+
 
 def create_retriever_from_cassandra(vstore, name, description):
     """Create a Retriever from cassandra Vector Store."""
