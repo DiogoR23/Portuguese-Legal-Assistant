@@ -10,6 +10,7 @@ from langchain_community.utilities.cassandra import SetupMode
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
+from .cassandra_vectorstore import connect_vstore
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -17,34 +18,6 @@ BASE_URL = os.getenv("BASE_URL")
 CASSANDRA_KEYSPACE = os.getenv("CASSANDRA_KEYSPACE")
 USERNAME = os.getenv("CASSANDRA_USERNAME")
 PASSWORD = os.getenv("CASSANDRA_PASSWORD")
-
-
-def connect_to_cassandra_vstore(session):
-    """
-    Create a Cassandra Vector Store from a session.
-    """
-    logging.info("Creating OpenAIEmbeddings...")
-
-    embeddings = OpenAIEmbeddings(
-        api_key=OPENAI_API_KEY,
-        base_url=BASE_URL,
-        model="nomic-ai/nomic-embed-text-v1.5-GGUF",
-        check_embedding_ctx_length=False,
-        dimensions=1024
-    )
-
-    logging.info("Creating Cassandra vector store...")
-    vstore = Cassandra(
-        embedding=embeddings,
-        session=session,
-        table_name="vector_store",
-        keyspace=CASSANDRA_KEYSPACE,
-        setup_mode=SetupMode.SYNC
-    )
-
-    logging.info("Cassandra vector store created successfully.")
-
-    return vstore
 
 
 def main():
@@ -58,7 +31,7 @@ def main():
     try:
         session = connect_to_cassandra()
 
-        vstore = connect_to_cassandra_vstore(session=session)
+        vstore = connect_vstore(session=session)
         retriever = vstore.as_retriever(search_kwargs={"k": 100})
         tool = create_retriever_tool(
             retriever=retriever,
@@ -74,7 +47,7 @@ def main():
             template=("You are an intelligent assistant specialized in Portuguese law."
                       "Your role is to provide accurate and detailed information about Portuguese laws using the provided database."
                       "When answering user queries, refer to specific laws and articles where applicable."
-                      "Ensure your responses are precise and useful.\n\n"
+                      "Ensure your responses are precise and useful, and provide your answers in english in case the user talks in english or other language besides portuguese, or portuguese in case the user talks in portuguese.\n\n"
                       "Query: {input}\n"
                       "{agent_scratchpad}")
         )
