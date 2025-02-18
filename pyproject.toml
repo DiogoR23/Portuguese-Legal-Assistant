@@ -41,7 +41,7 @@ django = "^5.1.6"
 
 [tool.poetry.scripts]
 scraper = "scraper.run_scraper:main"
-chat = "ai_assistant.chatbot:main"
+chat = "chatbot:main"
 
 [build-system]
 requires = ["poetry-core"]
