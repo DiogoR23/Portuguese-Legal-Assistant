@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from langchain.tools.retriever import create_retriever_tool
 from .connect_database import connect_to_cassandra
-from .chatbot import connect_to_cassandra_vstore
+from .cassandra_vectorstore import connect_vstore
 from .connect_database import save_answer_question
 from langchain_community.vectorstores import Cassandra
 from langchain_openai import OpenAIEmbeddings
@@ -22,7 +22,7 @@ def get_ai_response(user_input):
     try:
         session = connect_to_cassandra()
 
-        vstore = connect_to_cassandra_vstore(session=session)
+        vstore = connect_vstore(session=session)
         retriever = vstore.as_retriever(search_kwargs={"k": 100})
         tool = create_retriever_tool(
             retriever=retriever,
@@ -62,7 +62,6 @@ def get_ai_response(user_input):
     
     except Exception as e:
         logging.error(f"Error initializing the system: {e}")
-        return "I'm sorry, I'm having trouble processing your request. Please try again later."
     
     finally:
         if session:
