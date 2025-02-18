@@ -39,5 +39,4 @@ docker-compose.yml
 .env
 
 # Chatbot Files (unnecessary file like AI in powershell)
-ai_assistant/chatbot.py
-
+chatbot.py
