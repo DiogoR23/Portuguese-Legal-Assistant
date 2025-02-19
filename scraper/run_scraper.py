@@ -1,5 +1,4 @@
 from scraper.create_cassandra_session import CreateCassandraSession 
-# from scraper.storage import save_data_to_cassandra, clear_table, list_keyspaces, create_cassandra_session, list_tables, view_table_data
 from scraper.scraper import crawl_site
 import logging
 import os
