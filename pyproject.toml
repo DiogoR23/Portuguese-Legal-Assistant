@@ -42,7 +42,7 @@ rank-bm25 = "^0.2.2"
 
 [tool.poetry.scripts]
 scraper = "scraper.run_scraper:main"
-chat = "algorithm.chatbot:main"
+chat = "ai.chatbot:main"
 
 [build-system]
 requires = ["poetry-core"]
