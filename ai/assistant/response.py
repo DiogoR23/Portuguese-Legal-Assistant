@@ -2,9 +2,9 @@ from cassandra.cluster import Cluster
 from dotenv import load_dotenv
 import os
 from langchain.tools.retriever import create_retriever_tool
-from .connect_database import connect_to_cassandra
+from .database import connect_to_cassandra
 from .cassandra_vectorstore import connect_vstore
-from .connect_database import save_answer_question
+from .database import save_answer_question
 from langchain_community.vectorstores import Cassandra
 from langchain_openai import OpenAIEmbeddings
 import logging

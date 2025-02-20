@@ -26,8 +26,8 @@ cassandra_docker.yaml
 cassandra/data/
 cassandra/commitlog/
 cassandra/saved_caches/
-cassandra_db
-cassandra_fql
+data/cassandra_db
+data/cassandra_fql
 
 # VSCode Files
 .vscode/

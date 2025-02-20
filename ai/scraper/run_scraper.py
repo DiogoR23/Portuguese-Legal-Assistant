@@ -1,4 +1,4 @@
-from scraper.create_cassandra_session import CreateCassandraSession 
+from .session import CreateCassandraSession 
 from scraper.scraper import crawl_site
 import logging
 import os
