@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ai-assistant"
+name = "chatbot_project"
 version = "0.1.0"
 description = ""
 authors = ["Diogo Rodrigues <diogo.gorodrigues@gmail.com>"]
