@@ -1,5 +1,5 @@
-from .session import CreateCassandraSession 
-from scraper.scraper import crawl_site
+from session import CreateCassandraSession 
+from scraper import crawl_site
 import logging
 import os
 from dotenv import load_dotenv
