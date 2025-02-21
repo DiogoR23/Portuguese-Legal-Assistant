@@ -33,6 +33,12 @@ def get_ai_response(user_input):
         )
         tools = [tool]
 
+        # template = (
+        #     "You are an Intelligent assistant specialized in Portuguese law."
+        #     "Your role is to provide accurate and detailed information about Portuguese laws using the provided database"
+        #     "Ensure you"
+        # )
+
         prompt_template = PromptTemplate(
             input_variables=["input", "agent_scratchpad"],
             template=("You are an intelligent assistant specialized in Portuguese law."
