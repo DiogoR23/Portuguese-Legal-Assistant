@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 import logging
-from scraper.extractor import extract_data_from_page, extract_links
+from extractor import extract_data_from_page, extract_links
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
