@@ -24,11 +24,13 @@ def main():
         if session:
             crawl_site(start_url, base_url, session)
 
-            session.list_keyspaces()
+        logging.info("--- KEYSPACES ---")
+        session.list_keyspaces()
 
-            session.list_tables(KEYSPACE)
+        logging.info("--- TABLES ---")
+        session.list_tables(KEYSPACE)
 
-            session.view_table_data('articles', KEYSPACE)
+        session.view_table_data('articles', KEYSPACE)
 
     except Exception as e:
         logging.error(f"Error executing the principal function (main): {e}")
