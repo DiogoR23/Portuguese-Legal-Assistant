@@ -69,12 +69,12 @@ class CreateCassandraSession():
             CREATE TABLE IF NOT EXISTS cassandra.conversations (
                 id_conversation UUID,
                 id_user UUID,
-                content_answer TEXT,
-                content_questions TEXT,
-                data TIMESTAMP,
-                PRIMARY KEY ((id_user), id_conversation, data)
-            ) WITH CLUSTERING ORDER BY (id_conversation ASC, data DESC);
-            """)
+                id_question UUID,
+                id_answer UUID,
+                date TIMESTAMP,
+                PRIMARY KEY ((id_user), id_conversation, date)
+            ) WITH CLUSTERING ORDER BY (id_conversation ASC, date DESC);
+""")
 
         except Exception as e:
             logging.error(f"Error creating keyspaces and tables: {e}")
@@ -87,7 +87,7 @@ class CreateCassandraSession():
                 INSERT INTO cassandra.articles (id_articles, url, title, content)
                 VALUES (uuid(), %s, %s, %s)
                 """, (item['url'], item['title'], item['content']))
-        
+
         except Exception as e:
             logging.error(f"Error saving data to cassandra: {e}")
     
