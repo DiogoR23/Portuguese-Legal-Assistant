@@ -55,7 +55,27 @@ class CreateCassandraSession():
                 content_question TEXT
             )
             """)
-        
+
+            self.session.execute("""
+            CREATE TABLE IF NOT EXISTS cassandra.users (
+                id_user UUID PRIMARY KEY,
+                name TEXT,
+                email TEXT,
+                password TEXT
+            )
+            """)
+
+            self.session.execute("""
+            CREATE TABLE IF NOT EXISTS cassandra.conversations (
+                id_conversation UUID,
+                id_user UUID,
+                content_answer TEXT,
+                content_questions TEXT,
+                data TIMESTAMP,
+                PRIMARY KEY ((id_user), id_conversation, data)
+            ) WITH CLUSTERING ORDER BY (id_conversation ASC, data DESC);
+            """)
+
         except Exception as e:
             logging.error(f"Error creating keyspaces and tables: {e}")
     
@@ -97,7 +117,7 @@ class CreateCassandraSession():
         try:
             tables = self.session.execute(f"SELECT table_name FROM system_schema.tables WHERE keyspace_name = '{keyspace}'")
             for table in tables:
-                logging.info(table.table_name)
+                logging.info({table.table_name})
         
         except Exception as e:
             logging.error(f"Error listing tables: {e}")
