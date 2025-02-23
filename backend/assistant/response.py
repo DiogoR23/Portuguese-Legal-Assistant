@@ -1,11 +1,10 @@
-from database import connect_to_cassandra, save_answer_question
-from cassandra_vectorstore import connect_vstore
-from rag_pipeline import rag_tool
-from django.utils import timezone
-from plawsai_app.models import Conversation, QuestionAnswerHistory
+from .database import connect_to_cassandra, save_answer_question
+from .cassandra_vectorstore import connect_vstore
+from .rag_pipeline import rag_tool
 
-from langchain.agents import AgentExecutor, create_openai_tools_agent
 from cassandra.cluster import Cluster
+from django.utils import timezone
+from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_community.vectorstores import Cassandra
 from langchain_community.utilities.cassandra import SetupMode
 from langchain_openai import ChatOpenAI
@@ -22,7 +21,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_URL = os.getenv("BASE_URL")
 CASSANDRA_KEYSPACE = os.getenv("CASSANDRA_KEYSPACE")
 
-def get_ai_response(user_input, user):
+def get_ai_response(user_input):
     """Process user input and return an AI response."""
     try:
         session = connect_to_cassandra()
@@ -91,15 +90,6 @@ def get_ai_response(user_input, user):
 
         result = agent_executor.invoke({"input": user_input, "context": context, "agent_scratchpad": ""})
         response = result["output"]
-
-        conversation = Conversation.objects.create(user)
-
-        QuestionAnswerHistory.objects.create(
-            conversation = conversation,
-            question = user_input,
-            answer = response,
-            datetime = timezone.now()
-        )
 
         return response
     
