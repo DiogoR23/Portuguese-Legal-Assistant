@@ -14,7 +14,7 @@ load_dotenv()
 username = os.getenv("CASSANDRA_USERNAME")
 password = os.getenv("CASSANDRA_PASSWORD")
 
-def index(request, user_id):
+def chat(request, user_id):
     session = connect_to_cassandra()
 
     
