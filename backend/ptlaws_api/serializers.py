@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-
 class ArticleSerializer(serializers.Serializer):
     id_article = serializers.UUIDField()
     title = serializers.CharField(max_length=200)
