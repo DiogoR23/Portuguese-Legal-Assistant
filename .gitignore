@@ -40,6 +40,3 @@ docker-compose.yml
 # Chatbot Files (unnecessary file like AI in powershell)
 backend/chatbot.py
 backend/note.py
-
-# Json files
-package-lock.json
