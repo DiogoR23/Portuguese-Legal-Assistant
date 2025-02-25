@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'ptlaws_api.apps.PtlawsApiConfig'
+    'ptlaws_api.apps.PtlawsApiConfig',
+    'django_cassandra_engine',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +82,17 @@ WSGI_APPLICATION = 'ptlaws_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_cassandra_engine',
+        'NAME': 'cassandra',
+        'HOST': '127.0.0.1',
+        'USER': os.getenv('CASSANDRA_USERNAME'),
+        'PASSWORD': os.getenv('CASSANDRA_PASSWORD'),
+        'OPTIONS': {
+            'replication': {
+                'strategy_class': 'SimpleStrategy',
+                'replication_factor': 1
+            }
+        }
     }
 }
 
