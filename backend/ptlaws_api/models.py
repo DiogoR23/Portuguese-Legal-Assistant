@@ -20,8 +20,8 @@ class AIAnswers(DjangoCassandraModel):
 
 
 class UserQuestions(DjangoCassandraModel):
-    id_questions = columns.UUID(primary_key=True, default=uuid.uuid4)
-    content_questions = columns.Text(required=True)
+    id_question = columns.UUID(primary_key=True, default=uuid.uuid4)
+    content_question = columns.Text(required=True)
     class Meta:
         db_table = 'user_questions'
 
@@ -38,9 +38,9 @@ class Users(DjangoCassandraModel):
 class Conversations(DjangoCassandraModel):
     id_conversation = columns.UUID(primary_key=True, clustering_order='ASC', default=uuid.uuid4)
     id_user = columns.UUID(partition_key=True, required=True)
-    date = columns.UUID(primary_key=True, clustering_order='DESC', required=True)
+    data = columns.DateTime(primary_key=True, clustering_order='DESC', required=True)
     id_question = columns.UUID(required=True)
     id_answer = columns.UUID(required=True)
     class Meta:
         db_table = 'conversations'
-        # get_pk_field = 
+        get_pk_field = 'id_conversation'
