@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'ptlaws_api.apps.PtlawsApiConfig',
     'django_cassandra_engine',
+    'django_cassandra_engine.sessions',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +146,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication'
     ]
 }
+
+SESSION_ENGINE = 'django_cassandra_engine.sessions.backends.db'
