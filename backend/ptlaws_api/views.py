@@ -21,7 +21,7 @@ class ListUserView(APIView):
         serializer = UsersSerializer(users, many=True)
         return Response(serializer.data)
 
-class CreateUSerView(APIView):
+class CreateUserView(APIView):
     """
     View to create a new User.
     """
@@ -40,13 +40,8 @@ class AIResponseView(APIView):
     View to get the AI response and the articles that the RAG chose.
     """
     def get(self, request, format=None):
-        user_input = request.query_params.get('query')
+        user_input = request.query_params.get('question')
 
-        ai_response, rag_result = get_ai_response(user_input=user_input)
+        ai_response = get_ai_response(user_input=user_input)
 
-        article_titles = [f'<a href="{article.url}" target="_blan">{article.title}<\a>' for article in rag_result]
-
-        return Response({
-            'ai_response': ai_response,
-            'rag_result': article_titles
-        })
+        return Response({'ai_response': ai_response})
