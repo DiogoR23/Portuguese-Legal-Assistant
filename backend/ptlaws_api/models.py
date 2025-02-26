@@ -12,7 +12,7 @@ class Articles(DjangoCassandraModel):
         db_table = 'articles'
 
 
-class AiAnswers(DjangoCassandraModel):
+class AIAnswers(DjangoCassandraModel):
     id_answers = columns.UUID(primary_key=True, default=uuid.uuid4)
     content_answers = columns.Text(required=True)
     class Meta:
