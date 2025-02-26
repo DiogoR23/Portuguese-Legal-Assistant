@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from cassandra import ConsistencyLevel
+from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
 import os
 from dotenv import load_dotenv
 
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
     'django_cassandra_engine',
     'django_cassandra_engine.sessions',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -91,6 +95,12 @@ DATABASES = {
             'replication': {
                 'strategy_class': 'SimpleStrategy',
                 'replication_factor': 1
+            },
+            'connection': {
+                'auth_provider': PlainTextAuthProvider(
+                    username=os.getenv("CASSANDRA_USERNAME"),
+                    password=os.getenv("CASSANDRA_PASSWORD")
+                )
             }
         }
     }
@@ -146,5 +156,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication'
     ]
 }
-
-SESSION_ENGINE = 'django_cassandra_engine.sessions.backends.db'
