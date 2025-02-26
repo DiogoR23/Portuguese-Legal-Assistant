@@ -91,7 +91,7 @@ def get_ai_response(user_input):
         result = agent_executor.invoke({"input": user_input, "context": context, "agent_scratchpad": ""})
         response = result["output"]
 
-        return response
+        return response, retrieved_docs
     
     except Exception as e:
         logging.error(f"Error initializing the system: {e}")
