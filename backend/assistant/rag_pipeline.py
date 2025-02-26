@@ -23,7 +23,7 @@ def bm25_Retriever(session, keyspace):
         retriever_bm25.k = 30
 
         return retriever_bm25
-    
+
     except Exception as e:
         logging.error(f"Error creating BM25Retriever: {e}")
         return None
@@ -53,7 +53,7 @@ def rag_tool(session, name, keyspace, description, vstore):
         if retriever is None:
             logging.error(f"Hybrid retriever could not be created")
             return None
-            
+
         tool = create_retriever_tool(
             retriever=retriever,
             name=name,
