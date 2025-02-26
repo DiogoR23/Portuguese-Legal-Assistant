@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'ptlaws_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_cassandra_engine',
-        'NAME': 'cassandra',
+        'NAME': os.getenv('CASSANDRA_KEYSPACE'),
         'HOST': '127.0.0.1',
         'USER': os.getenv('CASSANDRA_USERNAME'),
         'PASSWORD': os.getenv('CASSANDRA_PASSWORD'),
