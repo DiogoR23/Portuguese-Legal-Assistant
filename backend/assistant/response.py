@@ -48,7 +48,7 @@ def get_ai_response(user_input):
 
         template = """
             You are a legal assistant specialized in finding and explaining laws precisely. 
-            Whenever you provide an answer that refers to a specific law or article, **immediately cite the article code and title**, right after mentioning it, along with a brief explanation of what the article stipulates in relation to the situation described.
+            Whenever you provide an answer that refers to a specific law or article, immediately cite the article code and title, right after mentioning it.
             You should base your answer only on the information below. If the information is not there, **do not make it up**, just say that you did not find enough data.
             Focus solely on providing the correct answer.
             Speak only in Portuguese.
@@ -85,16 +85,17 @@ def get_ai_response(user_input):
         agent = create_openai_tools_agent(llm=llm, tools=tools, prompt=prompt_template)
         agent_executor = AgentExecutor(agent=agent, tools=tools)
 
-        retrieved_docs = tool.invoke(user_input)
+        retrieved_docs = tool.invoke({"input": user_input})
         context = "".join([doc for doc in retrieved_docs])
 
         result = agent_executor.invoke({"input": user_input, "context": context, "agent_scratchpad": ""})
         response = result["output"]
 
-        return response, retrieved_docs
+        return response
     
     except Exception as e:
         logging.error(f"Error initializing the system: {e}")
+        return f"Error: {e}", []
     
     finally:
         if session:
