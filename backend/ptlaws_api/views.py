@@ -1,129 +1,52 @@
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from uuid import uuid4
-import datetime
-from .serializers import ArticleSerializer, ConversationSerializer, QuestionSerializer, AnswerSerializer
-from assistant.database import connect_to_cassandra
+from rest_framework import status, permissions
+from .models import Articles, AIAnswers, UserQuestions, Conversations, Users
+from .serializers import ArticlesSerializer, ConversationSerializer, UserQuestionsSerializer, AIAnswersSerializer, UsersSerializer
 from assistant.response import get_ai_response
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
+class ListUserView(APIView):
+    """
+    View to list all the users, only admins are able to access.
+    """
 
-username = os.getenv("CASSANDRA_USERNAME")
-password = os.getenv("CASSANDRA_PASSWORD")
+    permission_classes = [permissions.IsAdminUser]
 
-def chat(request, user_id):
-    session = connect_to_cassandra()
-
-    
-
-class ArticleView(APIView):
-    def get(self, request, *args, **kwargs):
-        # Connect to Cassandra Database
-        session = connect_to_cassandra()
-
-        # Query in the articles table
-        query = "SELECT * FROM articles WHERE id_article = %s"
-        rows = session.execute(query, [kwargs['id_article']])
-
-        articles = []
-        for row in rows:
-            articles.append({
-                'id_article': row['id_articles'],
-                'url': row['url'],
-                'title': row['title'],
-                'content': row['content']
-            })
-
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class CreateConversationView(APIView):
-    def post(self, request, *args, **kwargs):
-        # Connect to Cassandra Database
-        session = connect_to_cassandra()
-
-        # Get users questions
-        user_question = request.data.get('question')
-        user_id = request.data.get('user_id')
-        
-        # Generate a new unique ID for each question and answer
-        id_question = uuid4()
-        id_answer = uuid4()
-
-        if not user_id or not user_question:
-            return Response({"error": "id_user and content_questions are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Get the AI response
-        ai_response = get_ai_response(user_input=user_question)
-
-        # Insert the question in the user_questions table
-        question_query = """
-            INSERT INTO user_questions (id_question, content_question)
-            VALUES (%s, %s)
+    def get(self, request, format=None):
         """
-        session.execute(question_query, (id_question, user_question))
-
-        # Insert the AI response in the ai_answers table
-        answer_query = """
-            INSERT INTO ai_answers (id_answers, content_answers)
-            VALUES (%s, %s)
+        Return all the users.
         """
-        session.execute(answer_query, (id_answer, ai_response))
+        users = Users.objects.all()
+        serializer = UsersSerializer(users, many=True)
+        return Response(serializer.data)
 
-        # Insert in the conversations table
-        id_conversation = uuid4()
-        date = datetime.datetime.now()
-
-        conversation_query = """
-            INSERT INTO conversations (id_conversation, id_user, id_question, id_answer, date)
-            VALUES (%s, %s, %s, %s, %s)
+class CreateUSerView(APIView):
+    """
+    View to create a new User.
+    """
+    def post(self, request, format=None):
         """
-        session.execute(conversation_query, (id_conversation, user_id, id_question, id_answer, date))
+        Create a new User.
+        """
+        serializer = UsersSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"id_conversations": id_conversation, "answer": ai_response}, status=status.HTTP_201_CREATED)
+class AIResponseView(APIView):
+    """
+    View to get the AI response and the articles that the RAG chose.
+    """
+    def get(self, request, format=None):
+        user_input = request.query_params.get('query')
 
-class GetConversationView(APIView):
-    def get(self, request, user_id):
-        session = connect_to_cassandra()
+        ai_response, rag_result = get_ai_response(user_input=user_input)
 
-        query_answer = "SELECT id_answer FROM conversations WHERE id_user=%s"
-        answers_id = session.execute(query_answer, (user_id))
+        article_titles = [f'<a href="{article.url}" target="_blan">{article.title}<\a>' for article in rag_result]
 
-        query_question = "SELECT id_question FROM conversations WHERE id_user=%s"
-        questions_id = session.execute(query_question, (user_id))
-
-        for answer_id in answers_id:
-            query_content_answer = "SELECT content_answers FROM ai_answers WHERE id_answers=%s"
-            questions_content = session.execute(query_content_answer, (answer_id))
-        
-        for question_id in questions_id:
-            query_content_questions = "SELECT content_question FROM user_questions WHERE id_question=%s"
-            questions_content = session.execute(query_content_questions, (question_id))
-
-        query = "SELECT id_conversation, date FROM conversations WHERE id_user=%s"
-        rows = session.execute(query, (user_id))
-
-        conversations = [
-            {
-                "id_conversations": str(row.id_conversation),
-                "date": row.date,
-                "question_content": question,
-                "answer_content": answer
-            }
-            for row, question, answer in zip(rows, questions_content, questions_content)
-        ]
-
-        return Response(conversations, status=status.HTTP_200_OK)
-
-
-
-
-
-
-
-
-
+        return Response({
+            'ai_response': ai_response,
+            'rag_result': article_titles
+        })
