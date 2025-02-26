@@ -83,13 +83,13 @@ class CreateCassandraSession():
         """Save articles to the database."""
         try:
             for item in data:
-                self.session.execute(f"""
+                self.session.execute("""
                 INSERT INTO cassandra.articles (id_articles, url, title, content)
                 VALUES (uuid(), %s, %s, %s)
                 """, (item['url'], item['title'], item['content']))
-
         except Exception as e:
             logging.error(f"Error saving data to cassandra: {e}")
+
     
 
     def clear_table(self):
