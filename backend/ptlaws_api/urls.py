@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import ArticleView, CreateConversationView, GetConversationView
+from . import views
 
 urlpatterns = [
-    path('articles/<uuid:id_article>/', ArticleView.as_view(), name="article-detail"),
-    path('conversations/', CreateConversationView.as_view(), name='conversation-create'),
-    path('conversations/<uuid:user_id>', GetConversationView.as_view(), name='get-conversations')
+    path('users/', views.ListUserView.as_view(), name='user-list'),
+    path('create-user/', views.CreateUSerView.as_view(), name='user-create'),
+    path('ai-response/', views.AIResponseView.as_view(), name='ai-response')
 ]
