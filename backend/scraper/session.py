@@ -4,7 +4,7 @@ from cassandra.auth import PlainTextAuthProvider
 from cassandra.policies import DCAwareRoundRobinPolicy
 from cassandra.query import BatchStatement
 import uuid
-import os
+
 
 class CreateCassandraSession():
     """Class to create a session to the service where our Database is stored."""
@@ -13,8 +13,8 @@ class CreateCassandraSession():
 
     def __init__(self, username, password):
         """Initialize the connection to Cassandra."""
-        self.auth_provider = PlainTextAuthProvider(username=username, password=password)
-        self.cluster = Cluster(['127.0.0.1'], auth_provider=self.auth_provider,
+        auth_provider = PlainTextAuthProvider(username=username, password=password)
+        self.cluster = Cluster(['127.0.0.1'], auth_provider=auth_provider,
                           load_balancing_policy=DCAwareRoundRobinPolicy(local_dc='datacenter1'),
                           protocol_version=5)
     
@@ -83,7 +83,7 @@ class CreateCassandraSession():
         """Save articles to the database."""
         try:
             for item in data:
-                self.session.execute("""
+                self.session.execute(f"""
                 INSERT INTO cassandra.articles (id_articles, url, title, content)
                 VALUES (uuid(), %s, %s, %s)
                 """, (item['url'], item['title'], item['content']))
@@ -112,20 +112,20 @@ class CreateCassandraSession():
             logging.error(f"Error listing keyspaces: {e}")
     
 
-    def list_tables(self, keyspace):
+    def list_tables(self):
         """List all tables in the given keyspace."""
         try:
-            tables = self.session.execute(f"SELECT table_name FROM system_schema.tables WHERE keyspace_name = '{keyspace}'")
+            tables = self.session.execute(f"SELECT table_name FROM system_schema.tables WHERE keyspace_name = 'cassandra'")
             for table in tables:
                 logging.info({table.table_name})
         
         except Exception as e:
             logging.error(f"Error listing tables: {e}")
     
-    def view_table_data(self, table, keyspace, limit=10):
+    def view_table_data(self, table, limit=10):
         """View the data in the given table."""
         try:
-            data = self.session.execute(f"SELECT * FROM {keyspace}.{table} LIMIT {limit};")
+            data = self.session.execute(f"SELECT * FROM cassandra.{table} LIMIT {limit};")
             for row in data:
                 logging.info(row)
 
@@ -144,6 +144,17 @@ class CreateCassandraSession():
     
 
     def drop_table(self, table_name):
+        """Remove a specific Cassandra Table."""
+        if self.session is None:
+            logging.error("No active session. Please check the connection.")
+            return
+        
+        query = f"DROP TABLE cassandra.{table_name}."
+
+        self.session.execute(query)
+
+
+    def truncate_table(self, table_name):
         """Clear the information of a specific Cassandra table."""
         if self.session is None:
             logging.error("No active session. Please check the connection.")
@@ -152,26 +163,30 @@ class CreateCassandraSession():
         self.session.execute(f"TRUNCATE cassandra.{table_name}")
     
 
-    def keyspace_remove(self, keyspace):
+    def execute(self, query):
+        return self.session.execute(query)
+    
+
+    def keyspace_remove(self):
         """Removes a keyspace."""
         if self.session is None:
             logging.error("No active session. Please check the connection.")
             return
         
         try:
-            self.session.execute(f"DROP KEYSPACE {keyspace}")
+            self.session.execute(f"DROP KEYSPACE cassandra")
         except Exception as e:
             logging.error(f"Error removing keyspace: {e}")
     
 
-    def check_table(self, keyspace, table):
+    def check_table(self, table):
         """Show the columns for the corresponding keyspace table."""
         if self.session is None:
             logging.error("No active session. Please check the connection.")
             return
         
         try:
-            self.session.execute(f"DESCRIBE TABLE {keyspace}.{table}")
+            self.session.execute(f"DESCRIBE TABLE cassandra.{table}")
         
         except Exception as e:
             logging.error(f"Error describing table: {e}")
