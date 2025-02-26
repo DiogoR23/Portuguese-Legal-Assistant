@@ -3,6 +3,7 @@ from scraper import crawl_site
 import logging
 import os
 from dotenv import load_dotenv
+import asyncio
 
 load_dotenv()
 USERNAME = os.getenv('CASSANDRA_USERNAME')
@@ -11,7 +12,7 @@ KEYSPACE = os.getenv('CASSANDRA_KEYSPACE')
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def main():
+async def main():
     """Main function to execute the crawling and data saving"""
     try:
         session = CreateCassandraSession(username=USERNAME, password=PASSWORD)
@@ -22,19 +23,19 @@ def main():
         base_url = "https://diariodarepublica.pt"
 
         if session:
-            crawl_site(start_url, base_url, session)
+            await crawl_site(start_url, base_url, session)
 
         logging.info("--- KEYSPACES ---")
         session.list_keyspaces()
 
         logging.info("--- TABLES ---")
-        session.list_tables(KEYSPACE)
+        session.list_tables()
 
-        session.view_table_data('articles', KEYSPACE)
+        session.view_table_data('articles')
 
     except Exception as e:
         logging.error(f"Error executing the principal function (main): {e}")
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main()) 
