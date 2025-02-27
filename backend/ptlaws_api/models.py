@@ -11,20 +11,17 @@ class Articles(DjangoCassandraModel):
     class Meta:
         db_table = 'articles'
 
-
 class AIAnswers(DjangoCassandraModel):
     id_answers = columns.UUID(primary_key=True, default=uuid.uuid4)
     content_answers = columns.Text(required=True)
     class Meta:
         db_table = 'ai_answers'
 
-
 class UserQuestions(DjangoCassandraModel):
     id_question = columns.UUID(primary_key=True, default=uuid.uuid4)
     content_question = columns.Text(required=True)
     class Meta:
         db_table = 'user_questions'
-
 
 class Users(DjangoCassandraModel):
     id_user = columns.UUID(primary_key=True, default=uuid.uuid4)
@@ -34,11 +31,10 @@ class Users(DjangoCassandraModel):
     class Meta:
         db_table = 'users'
 
-
 class Conversations(DjangoCassandraModel):
     id_conversation = columns.UUID(primary_key=True, clustering_order='ASC', default=uuid.uuid4)
     id_user = columns.UUID(partition_key=True, required=True)
-    data = columns.DateTime(primary_key=True, clustering_order='DESC', required=True)
+    date = columns.DateTime(primary_key=True, clustering_order='DESC', required=True)
     id_question = columns.UUID(required=True)
     id_answer = columns.UUID(required=True)
     class Meta:
