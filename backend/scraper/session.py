@@ -17,11 +17,11 @@ class CreateCassandraSession():
         self.cluster = Cluster(['127.0.0.1'], auth_provider=auth_provider,
                           load_balancing_policy=DCAwareRoundRobinPolicy(local_dc='datacenter1'),
                           protocol_version=5)
-    
+
         self.session = self.cluster.connect()
 
         self._create_keyspaces_and_tables()
-    
+
 
     def _create_keyspaces_and_tables(self):
         """Create the keyspaces and tables if they don't exist."""
@@ -90,7 +90,6 @@ class CreateCassandraSession():
         except Exception as e:
             logging.error(f"Error saving data to cassandra: {e}")
 
-    
 
     def clear_table(self):
         """Clear the data from the given table."""
@@ -99,7 +98,7 @@ class CreateCassandraSession():
         
         except Exception as e:
             logging.error(f"Error clearing data from cassandra: {e}")
-    
+
 
     def list_keyspaces(self):
         """List all the keyspaces in the database."""
@@ -110,7 +109,7 @@ class CreateCassandraSession():
 
         except Exception as e:
             logging.error(f"Error listing keyspaces: {e}")
-    
+
 
     def list_tables(self):
         """List all tables in the given keyspace."""
@@ -121,7 +120,8 @@ class CreateCassandraSession():
         
         except Exception as e:
             logging.error(f"Error listing tables: {e}")
-    
+
+
     def view_table_data(self, table, limit=10):
         """View the data in the given table."""
         try:
@@ -131,7 +131,7 @@ class CreateCassandraSession():
 
         except Exception as e:
             logging.error(f"Error viewing table data: {e}")
-    
+
 
     def load_data_chat_format(self, articles):
         """Format article data for chat display"""
@@ -141,7 +141,7 @@ class CreateCassandraSession():
             data += str(f"ID: {article['id_articles']}\nURL: {article['url']}\nTitle: {article['title']}\nContent: {article['content']}\n\n")
 
         return data
-    
+
 
     def drop_table(self, table_name):
         """Remove a specific Cassandra Table."""
@@ -149,7 +149,7 @@ class CreateCassandraSession():
             logging.error("No active session. Please check the connection.")
             return
         
-        query = f"DROP TABLE cassandra.{table_name}."
+        query = f"DROP TABLE cassandra.{table_name}"
 
         self.session.execute(query)
 
@@ -161,37 +161,37 @@ class CreateCassandraSession():
             return
         
         self.session.execute(f"TRUNCATE cassandra.{table_name}")
-    
+
 
     def execute(self, query):
         return self.session.execute(query)
-    
+
 
     def keyspace_remove(self):
         """Removes a keyspace."""
         if self.session is None:
             logging.error("No active session. Please check the connection.")
             return
-        
+
         try:
             self.session.execute(f"DROP KEYSPACE cassandra")
         except Exception as e:
             logging.error(f"Error removing keyspace: {e}")
-    
+
 
     def check_table(self, table):
         """Show the columns for the corresponding keyspace table."""
         if self.session is None:
             logging.error("No active session. Please check the connection.")
             return
-        
+
         try:
             self.session.execute(f"DESCRIBE TABLE cassandra.{table}")
-        
+
         except Exception as e:
             logging.error(f"Error describing table: {e}")
 
-    
+
     def check_vector_store_data(self):
         """Check the data in the vector store."""
         try:
@@ -200,11 +200,11 @@ class CreateCassandraSession():
 
             for row in rows:
                 logging.info(row)
-        
+
         except Exception as e:
             logging.error(f"Error checking vector store data: {e}")
-    
-    
+
+
     def close(self):
         """Close the connection to Cassandra."""
         self.cluster.shutdown()
