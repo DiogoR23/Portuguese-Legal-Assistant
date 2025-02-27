@@ -28,7 +28,6 @@ async def crawl_site(start_url, base_url, session):
             await page.wait_for_timeout(5000)
             new_links = await extract_links(page) 
 
-            # Modificando o código para garantir que todos os links comecem com base_url
             full_links = [link if link.startswith(base_url) else base_url + link for link in new_links]
 
             for link in full_links:
