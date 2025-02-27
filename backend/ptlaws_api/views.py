@@ -2,9 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from rest_framework.decorators import api_view
+
 from .models import Articles, AIAnswers, UserQuestions, Conversations, Users
 from .serializers import ArticlesSerializer, ConversationSerializer, UserQuestionsSerializer, AIAnswersSerializer, UsersSerializer
 from assistant.response import get_ai_response
+
 
 class ListUserView(APIView):
     """
