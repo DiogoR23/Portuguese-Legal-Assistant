@@ -43,10 +43,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd party apps
     'rest_framework',
-    'ptlaws_api.apps.PtlawsApiConfig',
     'django_cassandra_engine',
     'django_cassandra_engine.sessions',
+    # My apps
+    'ptlaws_api.apps.PtlawsApiConfig',
+]
+
+SESSION_ENGINE = [
+    'django_cassandra_engine.sessions.backends.db'
 ]
 
 
@@ -58,7 +64,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'ptlaws_site.urls'
 
