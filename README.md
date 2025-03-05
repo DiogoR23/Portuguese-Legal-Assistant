@@ -3,8 +3,11 @@ This project consists in creating an AI Assistant specialized in Portuguese Laws
 
 Using LLMs and RAGs, this assistant is able to talk about some troubles or answers the user has. With the use of web scraping, this agent got the articles from DRE (Diário República Eletrónico) of Portugal.
 
+This project is running fully local, which means, it's not the fastest one, neither the best one. To use this agent, it is needed to create a `cassandra-docker.yaml` & `docker-compsoe.yaml`, next it is needed to update the `CassandraSession` class.
 
-#  Requirements
+
+
+##  Requirements
 ```bash
 pytest-playwright = "^0.5.1"
 cassandra-driver = "^3.29.1"
