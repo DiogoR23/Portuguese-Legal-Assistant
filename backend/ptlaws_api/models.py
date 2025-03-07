@@ -1,8 +1,3 @@
-import uuid
-from django_cassandra_engine.models import DjangoCassandraModel
-from cassandra.cqlengine import columns
-
-# Create your models here.
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django_cassandra_engine.models import DjangoCassandraModel
 from cassandra.cqlengine import columns
@@ -52,7 +47,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(DjangoCassandraModel, AbstractBaseUser):
     id_user = columns.UUID(primary_key=True, default=uuid.uuid4)
     email = columns.Text(required=True, index=True)
-    username = columns.Text(required=True, unique=True)
+    username = columns.Text(required=True)
     password = columns.Text(required=True)
 
     USERNAME_FIELD = 'email'
