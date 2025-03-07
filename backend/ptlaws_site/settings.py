@@ -16,6 +16,7 @@ from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import Cluster
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -46,7 +47,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'django_cassandra_engine',
-    'django_cassandra_engine.sessions',
+    'rest_framework_simplejwt'
     # My apps
     'ptlaws_api.apps.PtlawsApiConfig',
 ]
@@ -95,18 +96,13 @@ DATABASES = {
         'ENGINE': 'django_cassandra_engine',
         'NAME': os.getenv('CASSANDRA_KEYSPACE'),
         'HOST': '127.0.0.1',
+        'PORT': 9042,
         'USER': os.getenv('CASSANDRA_USERNAME'),
         'PASSWORD': os.getenv('CASSANDRA_PASSWORD'),
         'OPTIONS': {
             'replication': {
                 'strategy_class': 'SimpleStrategy',
                 'replication_factor': 1
-            },
-            'connection': {
-                'auth_provider': PlainTextAuthProvider(
-                    username=os.getenv("CASSANDRA_USERNAME"),
-                    password=os.getenv("CASSANDRA_PASSWORD")
-                )
             }
         }
     }
@@ -155,10 +151,16 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSE': [
-        'rest_framework.authentication.BasicAuthentication'
-    ]
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
