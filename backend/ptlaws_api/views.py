@@ -1,50 +1,54 @@
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import status, permissions
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
 
-from .models import Articles, AIAnswers, UserQuestions, Conversations, Users
-from .serializers import ArticlesSerializer, ConversationSerializer, UserQuestionsSerializer, AIAnswersSerializer, UsersSerializer
+from .serializers import RegisterSerializer, LoginSerializer, MessageSerializer
+from .models import Message, Conversation
 from assistant.response import get_ai_response
 
+import datetime
 
-class ListUserView(APIView):
-    """
-    View to list all the users, only admins are able to access.
-    """
+User = get_user_model()
 
-    permission_classes = [permissions.IsAdminUser]
+class ChatView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
-        """
-        Return all the users.
-        """
-        users = Users.objects.all()
-        serializer = UsersSerializer(users, many=True)
-        return Response(serializer.data)
+    def post(self, request, conversation_id):
+        user_input = request.data.get("message")
 
-class CreateUserView(APIView):
-    """
-    View to create a new User.
-    """
-    def post(self, request, format=None):
-        """
-        Create a new User.
-        """
-        serializer = UsersSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        message = Message.objects.create(
+            id_conversation=conversation_id,
+            sender="user",
+            content=user_input,
+            created_at=datetime.datetime.utcnow()
+        )
 
-class AIResponseView(APIView):
-    """
-    View to get the AI response and the articles that the RAG chose.
-    """
-    def get(self, request, format=None):
-        user_input = request.query_params.get('question')
+        ai_response = get_ai_response(user_input)
 
-        ai_response = get_ai_response(user_input=user_input)
+        ai_message = Message.objects.create(
+            id_conversation=conversation_id,
+            sender="AI",
+            content=ai_response,
+            created_at=datetime.datetime.utcnow()
+        )
 
-        return Response({'ai_response': ai_response})
+        return Response({
+            "user_message": MessageSerializer(message).data,
+            "ai_response": MessageSerializer(ai_message).data
+        })
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data)
