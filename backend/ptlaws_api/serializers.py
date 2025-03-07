@@ -1,31 +1,34 @@
 from rest_framework import serializers
-from .models import Articles, AIAnswers, UserQuestions, Conversations, Users
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import CustomUser, Message
 
-
-class ArticlesSerializer(serializers.Serializer):
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Articles
-        fields = ['id_articles', 'url', 'title', 'content']
+        model = Message
+        fields = ['id_message', 'id_conversation', 'sender', 'content', 'created_at']
 
 
-class AIAnswersSerializer(serializers.Serializer):
+class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AIAnswers
-        fields = ['content_answers']
+        model = CustomUser
+        fields = ['id_user', 'email', 'username', 'password']
 
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            email=validated_data['email'],
+            username=validated_data['username'],
+            password=validated_data['password']
+        )
+        return user
 
-class UserQuestionsSerializer(serializers.Serializer):
-    class Meta:
-        model = UserQuestions
-        fields = ['content_question']
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
 
-
-class UsersSerializer(serializers.Serializer):
-    class Meta:
-        model = Users
-        fields = ['name', 'email']
-
-class ConversationSerializer(serializers.Serializer):
-    class Meta:
-        model = Conversations
-        fields = ['id_user', 'data', 'id_question', 'id_answer']
+    def validate(self, data):
+        user = CustomUser.objects.filter(email=data["email"]).first()
+        if user and user.password == data["password"]:
+            refresh = RefreshToken.for_user(user)
+            return {"refresh": str(refresh), "access": str(refresh.access_token)}
+        raise serializers.ValidationError("Credenciais inválidas.")
