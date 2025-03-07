@@ -42,6 +42,8 @@ rank-bm25 = "^0.2.2"
 djangorestframework = "^3.15.2"
 django-cassandra-engine = "^1.9.0"
 django-cors-headers = "^4.7.0"
+djangorestframework-simplejwt = "^5.5.0"
+drf-yasg = "^1.21.9"
 
 [tool.poetry.scripts]
 scraper = "scraper.run_scraper:main"
