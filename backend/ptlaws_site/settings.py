@@ -11,9 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from cassandra import ConsistencyLevel
-from cassandra.auth import PlainTextAuthProvider
-from cassandra.cluster import Cluster
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -47,7 +44,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'django_cassandra_engine',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
     # My apps
     'ptlaws_api.apps.PtlawsApiConfig',
 ]
