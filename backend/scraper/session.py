@@ -42,40 +42,6 @@ class CreateCassandraSession():
             )
             """)
 
-            self.session.execute("""
-            CREATE TABLE IF NOT EXISTS cassandra.ai_answers (
-                id_answers UUID PRIMARY KEY,
-                content_answers TEXT
-            )
-            """)
-
-            self.session.execute("""
-            CREATE TABLE IF NOT EXISTS cassandra.user_questions (
-                id_question UUID PRIMARY KEY,
-                content_question TEXT
-            )
-            """)
-
-            self.session.execute("""
-            CREATE TABLE IF NOT EXISTS cassandra.users (
-                id_user UUID PRIMARY KEY,
-                name TEXT,
-                email TEXT,
-                password TEXT
-            )
-            """)
-
-            self.session.execute("""
-            CREATE TABLE IF NOT EXISTS cassandra.conversations (
-                id_conversation UUID,
-                id_user UUID,
-                id_question UUID,
-                id_answer UUID,
-                date TIMESTAMP,
-                PRIMARY KEY ((id_user), id_conversation, date)
-            ) WITH CLUSTERING ORDER BY (id_conversation ASC, date DESC);
-""")
-
         except Exception as e:
             logging.error(f"Error creating keyspaces and tables: {e}")
     
@@ -190,6 +156,17 @@ class CreateCassandraSession():
 
         except Exception as e:
             logging.error(f"Error describing table: {e}")
+    
+    def describe(self):
+        if self.session is None:
+            logging.error("No active session. Please chech the connection.")
+            return
+        
+        try:
+            self.session.execute("DESCRIBE TABLES;")
+        
+        except Exception as e:
+            logging.error(f"Error showing tables names: {e}")
 
 
     def check_vector_store_data(self):
