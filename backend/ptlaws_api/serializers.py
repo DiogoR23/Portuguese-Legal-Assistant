@@ -10,6 +10,10 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    id_user = serializers.UUIDField(format='hex', read_only=True)
+    email = serializers.CharField()
+    username = serializers.CharField()
+    password = serializers.CharField()
     class Meta:
         model = CustomUser
         fields = ['id_user', 'email', 'username', 'password']
