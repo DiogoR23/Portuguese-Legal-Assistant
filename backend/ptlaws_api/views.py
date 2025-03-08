@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 
 from .serializers import RegisterSerializer, LoginSerializer, MessageSerializer
-from .models import Message, Conversation
+from .models import Message, Conversations
 from assistant.response import get_ai_response
 
 import datetime
