@@ -49,9 +49,8 @@ INSTALLED_APPS = [
     'ptlaws_api.apps.PtlawsApiConfig',
 ]
 
-SESSION_ENGINE = [
-    'django_cassandra_engine.sessions.backends.db'
-]
+SESSION_ENGINE = 'django_cassandra_engine.sessions.backends.db'
+
 
 
 MIDDLEWARE = [
