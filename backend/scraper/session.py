@@ -34,7 +34,7 @@ class CreateCassandraSession():
 
             # Create Tables
             self.session.execute("""
-            CREATE TABLE IF NOT EXISTS cassandra.articles ( 
+            CREATE TABLE IF NOT EXISTS cassandra.articles (
                 id_articles UUID PRIMARY KEY,
                 url TEXT,
                 title TEXT,
