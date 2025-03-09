@@ -40,3 +40,4 @@ docker-compose.yml
 # Chatbot Files (unnecessary file like AI in powershell)
 backend/chatbot.py
 backend/assistant/note.py
+backend/login_teste.txt
