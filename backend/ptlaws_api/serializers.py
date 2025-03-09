@@ -1,29 +1,54 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+import bcrypt
+
 from .models import Users, Message
+
+import uuid
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ['id_message', 'id_conversation', 'sender', 'content', 'created_at']
 
-
-class RegisterSerializer(serializers.ModelSerializer):
-    id_user = serializers.UUIDField(format='hex', read_only=True)
+class UserSerializer(serializers.ModelSerializer):
+    id_user = serializers.UUIDField()
     email = serializers.CharField()
     username = serializers.CharField()
-    password = serializers.CharField()
+
+    is_active = serializers.BooleanField()
+    is_staff = serializers.BooleanField()
+    is_superuser = serializers.BooleanField() 
     class Meta:
         model = Users
-        fields = ['id_user', 'email', 'username', 'password']
+        fields = ['id_user', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
+
+class RegisterSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    username = serializers.CharField(max_length=255)
+    password = serializers.CharField(write_only=True)
+
+    def validate_email(self, value):
+        if list(Users.objects.filter(email=value)):
+            raise serializers.ValidationError("This email is already in use.")
+        return value
+
+    def validate_username(self, value):
+        if list(Users.objects.filter(username=value)):
+            raise serializers.ValidationError("This username is already in use.")
+        return value
 
     def create(self, validated_data):
-        user = Users.objects.create_user(
-            email=validated_data['email'],
+        """Create a user and encrypt the password before saving"""
+        hashed_password = bcrypt.hashpw(validated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+        user = Users.create(
+            id_user=uuid.uuid4(),
+            email=validated_data['email'].lower(),
             username=validated_data['username'],
-            password=validated_data['password']
+            password=hashed_password
         )
+
         return user
 
 class LoginSerializer(serializers.Serializer):
@@ -31,8 +56,12 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = Users.objects.filter(email=data["email"]).first()
-        if user and user.password == data["password"]:
-            refresh = RefreshToken.for_user(user)
-            return {"refresh": str(refresh), "access": str(refresh.access_token)}
-        raise serializers.ValidationError("Credenciais inválidas.")
+        email = data.get('email')
+        password = data.get('password')
+
+        user = Users.objects.filter(email=email).allow_filtering().first()
+        if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+            raise serializers.ValidationError("Invalid email or password!")
+        
+        return user
+
