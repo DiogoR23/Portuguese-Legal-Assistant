@@ -44,6 +44,7 @@ django-cassandra-engine = "^1.9.0"
 django-cors-headers = "^4.7.0"
 djangorestframework-simplejwt = "^5.5.0"
 drf-yasg = "^1.21.9"
+bcrypt = "^4.3.0"
 
 [tool.poetry.scripts]
 scraper = "scraper.run_scraper:main"
