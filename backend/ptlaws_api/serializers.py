@@ -59,9 +59,15 @@ class LoginSerializer(serializers.Serializer):
         email = data.get('email')
         password = data.get('password')
 
-        user = Users.objects.filter(email=email).allow_filtering().first()
-        if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+        user = Users.objects.filter(email=email).first()
+
+        if not user:
+            raise ValueError("Invalid email or password!")
+
+        if not user.password or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
             raise serializers.ValidationError("Invalid email or password!")
         
-        return user
+        data['user'] = user
+        
+        return data
 
