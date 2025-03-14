@@ -12,7 +12,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ['id_message', 'id_conversation', 'sender', 'content', 'created_at']
 
 class UserSerializer(serializers.ModelSerializer):
-    id_user = serializers.UUIDField()
+    id = serializers.UUIDField()
     email = serializers.CharField()
     username = serializers.CharField()
 
@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField() 
     class Meta:
         model = Users
-        fields = ['id_user', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -43,7 +43,7 @@ class RegisterSerializer(serializers.Serializer):
         hashed_password = bcrypt.hashpw(validated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
         user = Users.create(
-            id_user=uuid.uuid4(),
+            id=uuid.uuid4(),
             email=validated_data['email'].lower(),
             username=validated_data['username'],
             password=hashed_password
