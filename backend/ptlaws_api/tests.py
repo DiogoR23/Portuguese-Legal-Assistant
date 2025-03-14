@@ -59,7 +59,7 @@ class UserAuthTests(TestCase):
         """Test to verify if the refresh token works."""
         # Login to get the RefreshToken
         self.test_login_user()
-        
+
         response = self.client_api.post(self.token_refresh_url, {
             "refresh": self.refresh_token
         }, format='json')
