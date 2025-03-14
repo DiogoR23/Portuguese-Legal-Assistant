@@ -6,7 +6,7 @@ import bcrypt
 
 class Conversations(DjangoCassandraModel):
     id_conversation = columns.UUID(primary_key=True, default=uuid.uuid4)
-    id_user = columns.UUID(required=True)
+    id = columns.UUID(required=True)
     message_ids = columns.List(columns.UUID)
     title = columns.Text()
     created_at = columns.DateTime(default=datetime.datetime.utcnow)
@@ -25,7 +25,7 @@ class Message(DjangoCassandraModel):
         db_table = "messages"
 
 class Users(DjangoCassandraModel):
-    id_user = columns.UUID(primary_key=True, default=uuid.uuid4)
+    id = columns.UUID(primary_key=True, default=uuid.uuid4)
     email = columns.Text(required=True, index=True)
     username = columns.Text(required=True, index=True)
     password = columns.Text(required=True)
