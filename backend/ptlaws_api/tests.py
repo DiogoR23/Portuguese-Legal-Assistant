@@ -49,6 +49,10 @@ class UserAuthTests(TestCase):
     def test_access_protected_route(self):
         """Test to verify if a protected route demand authentication."""
         self.test_login_user()
+        print(f"DEBUG: Access Token = {self.access_token}")
+        if not self.access_token:
+            self.fail("Access token was not generated correctly!")
+
         self.client_api.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
 
         response = self.client_api.get(self.protected_url) # Try to access a protected route
