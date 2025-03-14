@@ -12,7 +12,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ['id_message', 'id_conversation', 'sender', 'content', 'created_at']
 
 class UserSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField()
+    user_id = serializers.UUIDField()
     email = serializers.CharField()
     username = serializers.CharField()
 
@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField() 
     class Meta:
         model = Users
-        fields = ['id', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['user_id', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -43,7 +43,7 @@ class RegisterSerializer(serializers.Serializer):
         hashed_password = bcrypt.hashpw(validated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
         user = Users.create(
-            id=uuid.uuid4(),
+            user_id=uuid.uuid4(),
             email=validated_data['email'].lower(),
             username=validated_data['username'],
             password=hashed_password
@@ -66,8 +66,8 @@ class LoginSerializer(serializers.Serializer):
 
         if not user.password or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
             raise serializers.ValidationError("Invalid email or password!")
-        
+
         data['user'] = user
-        
+
         return data
 
