@@ -24,7 +24,7 @@ class RegisterView(APIView):
             hashed_password = bcrypt.hashpw(serializer.validated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
             user = Users.create(
-                id = uuid.uuid4(),
+                user_id = uuid.uuid4(),
                 email = serializer.validated_data['email'].lower(),
                 username = serializer.validated_data['username'],
                 password = hashed_password
