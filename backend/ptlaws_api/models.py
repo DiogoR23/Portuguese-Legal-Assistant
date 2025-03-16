@@ -1,18 +1,21 @@
 from django_cassandra_engine.models import DjangoCassandraModel
+from django.contrib.auth.models import BaseUserManager
 from cassandra.cqlengine import columns
 import uuid
 import datetime
 import bcrypt
 
+
 class Conversations(DjangoCassandraModel):
     id_conversation = columns.UUID(primary_key=True, default=uuid.uuid4)
-    user_id = columns.UUID(required=True)
+    id = columns.UUID(required=True) # Refers to the users ID
     message_ids = columns.List(columns.UUID)
     title = columns.Text()
     created_at = columns.DateTime(default=datetime.datetime.utcnow)
 
     class Meta:
         db_table = "conversations"
+
 
 class Message(DjangoCassandraModel):
     id_message = columns.UUID(primary_key=True, default=uuid.uuid4)
@@ -24,8 +27,9 @@ class Message(DjangoCassandraModel):
     class Meta:
         db_table = "messages"
 
+
 class Users(DjangoCassandraModel):
-    user_id = columns.UUID(primary_key=True, default=uuid.uuid4)
+    id = columns.UUID(primary_key=True, default=uuid.uuid4) # User ID
     email = columns.Text(required=True, index=True)
     username = columns.Text(required=True, index=True)
     password = columns.Text(required=True)
@@ -34,16 +38,31 @@ class Users(DjangoCassandraModel):
     is_staff = columns.Boolean(default=False)
     is_superuser = columns.Boolean(default=False)
 
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'password']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'password']
 
     class Meta:
         db_table = 'users'
 
     def set_password(self, password):
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-    
+
     def check_password(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+    
+    def get_full_name(self):
+        return self.username
 
+    def get_short_name(self):
+        return self.username
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    @property
+    def is_authenticated(self):
+        return True
+    
+    def __str__(self):
+        return self.username
