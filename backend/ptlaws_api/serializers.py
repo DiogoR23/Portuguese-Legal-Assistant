@@ -12,7 +12,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ['id_message', 'id_conversation', 'sender', 'content', 'created_at']
 
 class UserSerializer(serializers.ModelSerializer):
-    user_id = serializers.UUIDField()
+    id = serializers.UUIDField(format='hex_verbose')
     email = serializers.CharField()
     username = serializers.CharField()
 
@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_superuser = serializers.BooleanField() 
     class Meta:
         model = Users
-        fields = ['user_id', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['id', 'email', 'username', 'is_active', 'is_staff', 'is_superuser']
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -29,12 +29,12 @@ class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate_email(self, value):
-        if list(Users.objects.filter(email=value)):
+        if Users.objects.filter(email=value).count() > 0:
             raise serializers.ValidationError("This email is already in use.")
         return value
 
     def validate_username(self, value):
-        if list(Users.objects.filter(username=value)):
+        if Users.objects.filter(username=value).count() > 0:
             raise serializers.ValidationError("This username is already in use.")
         return value
 
@@ -43,7 +43,7 @@ class RegisterSerializer(serializers.Serializer):
         hashed_password = bcrypt.hashpw(validated_data['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
         user = Users.create(
-            user_id=uuid.uuid4(),
+            id=uuid.uuid4(),
             email=validated_data['email'].lower(),
             username=validated_data['username'],
             password=hashed_password
@@ -70,4 +70,3 @@ class LoginSerializer(serializers.Serializer):
         data['user'] = user
 
         return data
-
