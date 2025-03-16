@@ -1,9 +1,9 @@
-from django.test import TestCase
+from django_cassandra_engine.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 import uuid
 
-# Create your tests here.
+
 class UserAuthTests(TestCase):
     def setUp(self):
         """Initial Test Configuration."""
@@ -18,7 +18,6 @@ class UserAuthTests(TestCase):
             "username": "TestUser",
             "password": "testpass123"
         }
-
 
     def test_register_user(self):
         """Test to check if a user can register."""
@@ -65,7 +64,7 @@ class UserAuthTests(TestCase):
         self.test_login_user()
 
         response = self.client_api.post(self.token_refresh_url, {
-            "refresh": self.refresh_token
+            "refresh": str(self.refresh_token)
         }, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
