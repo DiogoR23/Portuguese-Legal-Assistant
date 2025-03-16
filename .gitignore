@@ -41,3 +41,4 @@ docker-compose.yml
 backend/chatbot.py
 backend/assistant/note.py
 backend/login_teste.txt
+chatbot-ui/node_modules
