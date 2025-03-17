@@ -38,8 +38,8 @@ class Users(DjangoCassandraModel):
     is_staff = columns.Boolean(default=False)
     is_superuser = columns.Boolean(default=False)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'password']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'password']
 
     class Meta:
         db_table = 'users'
