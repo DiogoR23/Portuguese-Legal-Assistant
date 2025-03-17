@@ -5,7 +5,6 @@ const Chatbot = () => {
     const [input, setInput] = useState("");
 
     useEffect(() => {
-        // Carregar histórico do localStorage
         const savedMessages = JSON.parse(localStorage.getItem("chatHistory")) || [];
         setMessages(savedMessages);
     }, []);
@@ -15,7 +14,7 @@ const Chatbot = () => {
 
         const newMessages = [...messages, { sender: "user", text: input }];
         setMessages(newMessages);
-        localStorage.setItem("chatHistory", JSON.stringify(newMessages));  // Salvar no localStorage
+        localStorage.setItem("chatHistory", JSON.stringify(newMessages));
 
         const response = await fetch("http://127.0.0.1:8000/api/chat/", {
             method: "POST",
