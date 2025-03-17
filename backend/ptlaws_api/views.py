@@ -1,18 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-# from rest_framework import status
-# from rest_framework_simplejwt.tokens import RefreshToken
-# from django.conf import settings
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
 
-# from .serializers import RegisterSerializer, UserSerializer, LoginSerializer
-# from .models import Users
+from .serializers import RegisterSerializer, UserSerializer, LoginSerializer
+from .models import Users
 from assistant.response import get_ai_response
 
-# import bcrypt
-# import jwt
-# import datetime
-# import uuid
+import bcrypt
+import jwt
+import datetime
+import uuid
 
 
 class ChatView(APIView):
