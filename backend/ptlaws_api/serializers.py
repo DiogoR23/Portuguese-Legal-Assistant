@@ -70,3 +70,10 @@ class LoginSerializer(serializers.Serializer):
         data['user'] = user
 
         return data
+
+class CustomTokenSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data['user_id'] = str(self.user.id)
+        return data
