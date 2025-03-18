@@ -44,7 +44,7 @@ def get_ai_response(user_input):
         )
         tools = [tool]
 
-        input_variables = ["input", "agent_scratchpad"]
+        input_variables = ["input", "context", "agent_scratchpad"]
 
         template = """
             You are a legal assistant specialized in finding and explaining laws precisely. 
@@ -52,6 +52,9 @@ def get_ai_response(user_input):
             You should base your answer only on the information below. If the information is not there, **do not make it up**, just say that you did not find enough data.
             Focus solely on providing the correct answer.
             Speak only in Portuguese.
+
+            **Available Context**:
+            {context} # This context include detailed legal references including articles code and titles
 
             **User Input**:
             {input}
@@ -82,7 +85,10 @@ def get_ai_response(user_input):
         agent = create_openai_tools_agent(llm=llm, tools=tools, prompt=prompt_template)
         agent_executor = AgentExecutor(agent=agent, tools=tools)
 
-        result = agent_executor.invoke({"input": user_input, "agent_scratchpad": ""})
+        retrieved_docs = tool.invoke(user_input)
+        context = "".join([doc for doc in retrieved_docs])
+
+        result = agent_executor.invoke({"input": user_input,"context": context, "agent_scratchpad": ""})
         response = result["output"]
 
         return response
