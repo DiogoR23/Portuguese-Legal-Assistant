@@ -93,6 +93,13 @@ WSGI_APPLICATION = 'ptlaws_site.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_NAME'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASS'),
+        'PORT': 5432,
+    },
+    'cassandra': {
         'ENGINE': 'django_cassandra_engine',
         'NAME': os.getenv('CASSANDRA_KEYSPACE'),
         'HOST': '127.0.0.1',
@@ -170,3 +177,5 @@ SIMPLE_JWT = {
 
     "TOKEN_OBTAIN_SERIALIZER": "ptlaws_api.serializers.CustomTokenSerializer",
 }
+
+AUTH_USER_MODEL = ''
