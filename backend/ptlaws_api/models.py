@@ -15,6 +15,7 @@ class Conversations(DjangoCassandraModel):
 
     class Meta:
         db_table = "conversations"
+        db_alias = 'cassandra'
 
 
 class Message(DjangoCassandraModel):
@@ -26,6 +27,7 @@ class Message(DjangoCassandraModel):
 
     class Meta:
         db_table = "messages"
+        db_alias = 'cassandra'
 
 
 class Users(DjangoCassandraModel):
