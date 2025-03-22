@@ -46,8 +46,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_cassandra_engine',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     # My apps
-    'ptlaws_api.apps.PtlawsApiConfig',
+    'ptlaws_api',
+    'users',
 ]
 
 SESSION_ENGINE = 'django_cassandra_engine.sessions.backends.db'
@@ -97,6 +99,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_NAME'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASS'),
+        'HOST': '127.0.0.1',
         'PORT': 5432,
     },
     'cassandra': {
@@ -114,6 +117,12 @@ DATABASES = {
         }
     }
 }
+
+# Routers
+DATABASE_ROUTER = [
+    'ptlaws_site.routers.cassandra_router.CassandraRouter',
+    'ptlaws_site.routers.postgres_router.PostgresRouter',
+]
 
 
 # Password validation
@@ -157,7 +166,7 @@ STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'ptlaws_api.authentication.CassandraJWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -170,12 +179,14 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
-    "USER_ID_FIELD": "id", # The same value as the Users column
+    "USER_ID_FIELD": "user_id", # The same value as the Users column
     "USER_ID_CLAIM": "user_id",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "ALGORITHM": "HS256",
-
-    "TOKEN_OBTAIN_SERIALIZER": "ptlaws_api.serializers.CustomTokenSerializer",
 }
 
-AUTH_USER_MODEL = ''
+AUTH_USER_MODEL = 'users.Users'
+
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailBackend',
+]
