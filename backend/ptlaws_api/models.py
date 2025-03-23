@@ -7,7 +7,7 @@ import datetime
 
 class Conversations(DjangoCassandraModel):
     id_conversation = columns.UUID(primary_key=True, default=uuid.uuid4)
-    user_id = columns.UUID(required=True) # Refers to the users ID
+    user_id = columns.UUID(required=True)
     message_ids = columns.List(columns.UUID)
     title = columns.Text()
     created_at = columns.DateTime(default=datetime.datetime.utcnow)
