@@ -4,14 +4,22 @@ const API = axios.create({
     baseURL: "http://localhost:8000/api/",
 });
 
-// POST to user login (expects email & password or your defined schema)
+// Authentication
 export const loginUser = (data) => API.post("user/login/", data);
-
-// POST to register a user (expects username, email, password)
 export const registerUser = (data) => API.post("user/register/", data);
+
+// Chat (Send a question to the AI)
+export const sendMessage = (data, token) =>
+    API.post("ai/chat/", data, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+// Conversation History
+// export const fetchChatHistory = (token) =>
+//     API.get("conversas")\
 
 // POST to chat with the AI, token must be included in header
 export const sendMessage = (data, token) =>
     API.post("ai/chat/", data, {
-        headers: {Authorization: 'Bearer ${token}'}
+        headers: {Authorization: `Bearer ${token}`}
 });
