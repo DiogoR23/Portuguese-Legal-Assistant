@@ -1,14 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Chat from "./pages/Chat";
+import React from "react";
+import AuthPage from "./pages/AuthPage";
 
-export default function App() {
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/chat" element={<Chat />} />
-      </Routes>
-    </Router>
+    <div>
+      <AuthPage />
+    </div>
   );
 }
+
+export default App;
