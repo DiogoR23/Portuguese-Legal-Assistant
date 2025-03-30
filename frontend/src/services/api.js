@@ -1,25 +1,8 @@
-import axios from "axios";
-
-const API = axios.create({
-    baseURL: "http://localhost:8000/api/",
-});
+import API from "./axiosInstance";
 
 // Authentication
-export const loginUser = (data) => API.post("user/login/", data);
-export const registerUser = (data) => API.post("user/register/", data);
+export const loginUser = (data) => API.post("users/login/", data);
+export const registerUser = (data) => API.post("users/register/", data);
+export const sendMessage = (data) => API.post("ai/chat/", data);
+export const getUserInfo = () => API.get('protected/');
 
-// Chat (Send a question to the AI)
-export const sendMessage = (data, token) =>
-    API.post("ai/chat/", data, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-
-// Conversation History
-// export const fetchChatHistory = (token) =>
-//     API.get("conversas")\
-
-// POST to chat with the AI, token must be included in header
-export const sendMessage = (data, token) =>
-    API.post("ai/chat/", data, {
-        headers: {Authorization: `Bearer ${token}`}
-});
