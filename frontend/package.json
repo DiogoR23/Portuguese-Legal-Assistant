@@ -20,6 +20,7 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.4.0",
     "tailwind-merge": "^3.0.2",
+    "tailwind-scrollbar": "^4.0.2",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
@@ -41,5 +42,8 @@
     "ignoredBuiltDependencies": [
       "esbuild"
     ]
+  },
+  "overrrides": {
+    "react-error-overlay": "^6.0.9"
   }
 }
