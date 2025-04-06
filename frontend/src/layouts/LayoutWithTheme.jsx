@@ -1,13 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import ThemeToggle from '@/components/ThemeToggle';
 
-const LayoutWithTheme = () => {
+const LayoutWithTheme = ({}) => {
   return (
-    <>
-      <ThemeToggle />
-      <Outlet />
-    </>
+    <Outlet />
   );
 };
 
