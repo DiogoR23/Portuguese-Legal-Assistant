@@ -1,12 +1,11 @@
-// src/components/ThemeToggle.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 
-const ThemeToggle = () => {
-  const [darkMode, setDarkMode] = React.useState(() => {
-    // Verifica o tema preferido do sistema ou o tema salvo
-    return localStorage.getItem('theme') === 'dark' || 
-      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+const ThemeToggle = ({ floating = false }) => {
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark' ||
+      (!localStorage.getItem('theme') &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
   });
 
   useEffect(() => {
@@ -19,21 +18,26 @@ const ThemeToggle = () => {
     }
   }, [darkMode]);
 
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
+  const toggleTheme = () => setDarkMode(!darkMode);
 
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-      aria-label={darkMode ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
+      className={`relative inline-flex h-[20px] w-[36px] items-center rounded-full transition-colors
+        ${darkMode ? 'bg-[#01497C]' : 'bg-gray-300'} 
+        ${floating ? 'fixed top-4 right-4 z-50' : ''}`}
+      aria-label="Alternar tema"
     >
-      {darkMode ? (
-        <SunIcon className="h-6 w-6" />
-      ) : (
-        <MoonIcon className="h-6 w-6" />
-      )}
+      <span
+        className={`inline-block h-[16px] w-[16px] transform rounded-full transition-transform 
+          ${darkMode ? 'translate-x-[16px] bg-white' : 'translate-x-[4px] bg-gray-800'}`}
+      >
+        {darkMode ? (
+          <MoonIcon className="h-3.5 w-3.5 text-[#01497C] mx-auto mt-[1px]" />
+        ) : (
+          <SunIcon className="h-3.5 w-3.5 text-white mx-auto mt-[1px]" />
+        )}
+      </span>
     </button>
   );
 };
