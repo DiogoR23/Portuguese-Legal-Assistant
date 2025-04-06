@@ -24,7 +24,7 @@ const LoginPage = () => {
       const { access, refresh, user } = response.data;
       localStorage.setItem('access', access);
       localStorage.setItem('refresh', refresh);
-      window.location.href = '/';
+      window.location.href = '/chat';
     } catch (err) {
       const backendError = err.response?.data;
     
