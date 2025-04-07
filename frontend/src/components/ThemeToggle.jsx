@@ -24,7 +24,7 @@ const ThemeToggle = ({ floating = false }) => {
     <button
       onClick={toggleTheme}
       className={`relative inline-flex h-[20px] w-[36px] items-center rounded-full transition-colors
-        ${darkMode ? 'bg-[#01497C]' : 'bg-gray-300'} 
+        ${darkMode ? 'bg-gray-700' : 'bg-gray-300'} 
         ${floating ? 'fixed top-4 right-4 z-50' : ''}`}
       aria-label="Alternar tema"
     >
@@ -33,7 +33,7 @@ const ThemeToggle = ({ floating = false }) => {
           ${darkMode ? 'translate-x-[16px] bg-white' : 'translate-x-[4px] bg-gray-800'}`}
       >
         {darkMode ? (
-          <MoonIcon className="h-3.5 w-3.5 text-[#01497C] mx-auto mt-[1px]" />
+          <MoonIcon className="h-3.5 w-3.5 text-gray-700 mx-auto mt-[1px]" />
         ) : (
           <SunIcon className="h-3.5 w-3.5 text-white mx-auto mt-[1px]" />
         )}
