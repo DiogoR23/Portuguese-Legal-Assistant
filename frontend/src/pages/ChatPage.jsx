@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Bars3Icon,
   PlusIcon,
@@ -10,7 +10,6 @@ import ThemeToggle from '@/components/ThemeToggle';
 
 const ChatPage = () => {
   const navigate = useNavigate();
-
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -19,9 +18,7 @@ const ChatPage = () => {
   ]);
   const [input, setInput] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
   const textareaRef = useRef(null);
-  const messagesEndRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,135 +38,144 @@ const ChatPage = () => {
     setInput('');
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
-
   useEffect(() => {
-    const el = textareaRef.current;
-    if (el) {
-      el.style.height = 'auto';
-      el.style.height = `${Math.min(el.scrollHeight, 200)}px`;
-    }
+    const textarea = textareaRef.current;
+    const lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+    const maxRows = 5;
+    const maxHeight = lineHeight * maxRows;
+
+    textarea.style.height = 'auto';
+    const newHeight = Math.min(textarea.scrollHeight, maxHeight);
+    textarea.style.height = `${newHeight}px`;
+    textarea.style.overflowY = textarea.scrollHeight > maxHeight ? 'auto' : 'hidden';
   }, [input]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+const messagesEndRef = useRef(null);
+
+useEffect(() => {
+  if (messagesEndRef.current) {
+    messagesEndRef.current.scrollIntoView({behavior: 'smooth'});
+  }
+}, [messages]);
 
   return (
-    <div className="min-h-screen flex bg-[#F8FAFC] dark:bg-[#1f1f1f] text-gray-900 dark:text-white transition-colors duration-300">
+    <div className="h-screen overflow-hiden flex bg-background dark:bg-[#2a2a2a] text-foreground transition-colors duration-300">
       {/* Sidebar */}
       <aside
-        className={`transition-all duration-300 ease-in-out ${
+        className={`border-r border-gray-700 transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'w-64' : 'w-0'
-        } overflow-hidden bg-white dark:bg-[#1a1a1a] border-r border-gray-300 dark:border-gray-700 flex flex-col`}
+        } overflow-hidden bg-background dark:bg-[#2A2A30]`}
       >
-        <div className="flex items-center justify-between px-4 py-3">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-          >
-            <Bars3Icon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
-          </button>
-          <button
-            className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white px-3 py-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition"
-          >
-            <span>Nova Conversa</span>
-            <PlusIcon className="h-4 w-4" />
-          </button>
-        </div>
-        <hr className="mx-4 border-gray-400 dark:border-gray-700" />
+        <div className="h-full flex flex-col p-4">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            >
+              <Bars3Icon className="h-6 w-6" />
+            </button>
+            <button
+              onClick={() => navigate(0)}
+              className="flex items-center gap-2 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded transition"
+            >
+              Nova Conversa
+              <PlusIcon className="h-4 w-4" />
+            </button>
+          </div>
 
-        <div className="flex-1 px-4 py-6 text-sm italic text-blue-300 dark:text-blue-200">
-          Sem conversas ainda.
-        </div>
+          <hr className="border-gray-700 mb-4 mt-2" />
+          <p className="italic text-sm text-muted-foreground">Sem conversas ainda.</p>
 
-        <div className="mt-auto px-4 pb-4">
-          <hr className="border-gray-400 dark:border-gray-700 mb-4" />
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="mt-auto pt-6">
+            <hr className="border-gray-700 mb-4" />
+            <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Tema</span>
+              <ThemeToggle />
             </div>
-            <ThemeToggle />
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Botão para mostrar a sidebar quando está oculta */}
+      {!sidebarOpen && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="fixed top-4 left-4 z-50 p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+        >
+          <Bars3Icon className="h-6 w-6" />
+        </button>
+      )}
+
+      {/* Main */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between p-4 border-b border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1f1f1f]">
-          <div className="w-1/3 flex items-center">
-            {!sidebarOpen && (
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-              >
-                <Bars3Icon className="h-6 w-6 text-gray-800 dark:text-gray-200" />
-              </button>
-            )}
-          </div>
-          <div className="w-1/3 text-center">
-            <h1 className="text-2xl font-bold text-[#012A4A] dark:text-white">Amel.IA</h1>
-          </div>
-          <div className="w-1/3 flex justify-end">
+        <header className="flex items-center justify-between px-4 py-3 border-b border-gray-700 bg-background dark:bg-[#2a2a2a]">
+          <div className="flex-1" />
+          <h1 className="text-xl font-bold text-center text-primary flex-1">Amel.IA</h1>
+          <div className="flex justify-end flex-1">
             <UserMenu />
           </div>
         </header>
 
-        {/* Chat Area */}
-        <main className="flex-1 overflow-y-auto px-4 py-6 flex flex-col items-center bg-[#F8FAFC] dark:bg-[#1f1f1f]">
-          <div className="w-full max-w-2xl flex flex-col gap-4">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`whitespace-pre-wrap break-words max-w-[80%] rounded-lg px-4 py-2 ${
-                  msg.role === 'user'
-                    ? 'bg-[#01497C] dark:bg-[#2A6F97] text-white self-end text-right shadow-md'
-                    : 'text-black dark:text-white self-start text-left'
-                }`}
-              >
-                {msg.content}
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
+        {/* Área de Chat */}
+        <main className="flex-1 bg-background dark:bg-[#2a2a2a] overflow-hidden">
+          <div className="h-full px-4 py-6 flex justify-center">
+            <div
+              className="w-full max-w-2xl flex flex-col gap-4 overflow-y-auto rounded-md border border-transparent px-5 py-2 text-foreground bg-transparent leading-snug scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent"
+              style={{
+                maxHeight: 'calc(100vh - 172px)',
+                overflowY: 'auto',
+              }}
+            >
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`whitespace-pre-wrap break-words px-4 py-2 rounded-md max-w-xs ${
+                    msg.role === 'user'
+                      ? 'bg-blue-700 text-white self-end'
+                      : 'text-foreground self-start'
+                  }`}
+                >
+                  {msg.content}
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
           </div>
         </main>
 
         {/* Input */}
-        <form onSubmit={handleSubmit} className="px-4 py-4 border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-[#1f1f1f]">
+        <form
+          onSubmit={handleSubmit}
+          className="px-4 py-4 border-t border-gray-700 bg-background dark:bg-[#2a2a2a]"
+        >
           <div className="max-w-4xl mx-auto flex items-end gap-2">
-            <div className="flex-1">
-              <div className="flex items-end bg-transparent border border-[#01497C] dark:border-[#2A6F97] rounded-3xl px-4 py-2 focus-within:ring-2 focus-within:ring-[#01497C] dark:focus-within:ring-[#2A6F97] transition">
-                <textarea
-                  rows={1}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSubmit(e);
-                    }
-                  }}
-                  placeholder="Escreve a tua pergunta legal aqui..."
-                  className="w-full resize-none bg-transparent text-white dark:text-white text-sm placeholder-gray-400 focus:outline-none max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent"
-                  style={{
-                    lineHeight: '1.5rem',
-                    maxHeight: '10rem',
-                  }}
-                />
-                <button
-                  type="submit"
-                  className="ml-2 bg-[#01497C] hover:bg-[#2A6F97] text-white p-2 rounded-full flex items-center justify-center transition"
-                >
-                  <PaperAirplaneIcon className="h-5 w-5" />
-                </button>
-              </div>
+            <div className="flex-1 relative">
+              <textarea
+                ref={textareaRef}
+                rows={1}
+                placeholder="Escreve a tua pergunta legal aqui..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
+                className="w-full resize-none rounded-md border border-blue-600 px-5 py-2 text-foreground bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 leading-snug scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent"
+                style={{
+                  maxHeight: '8.5rem',
+                  overflowY: 'auto',
+                }}
+              />
             </div>
+            <button
+              type="submit"
+              className="bg-blue-700 hover:bg-blue-600 text-white rounded-full p-3 transition"
+            >
+              <PaperAirplaneIcon className="h-5 w-5" />
+            </button>
           </div>
         </form>
       </div>
