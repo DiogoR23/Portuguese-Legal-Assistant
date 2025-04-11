@@ -79,7 +79,7 @@ useEffect(() => {
             </button>
             <button
               onClick={() => navigate(0)}
-              className="flex items-center gap-2 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded transition"
+              className="flex items-center gap-2 text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 p-2 rounded transition"
             >
               Nova Conversa
               <PlusIcon className="h-4 w-4" />
@@ -150,7 +150,7 @@ useEffect(() => {
         {/* Input */}
         <form onSubmit={handleSubmit} className="px-4 py-4 bg-background dark:bg-[#2a2a2a]">
           <div className="max-w-4xl mx-auto w-full">
-            <div className="flex items-end justify-between rounded-[2rem] px-4 py-1.5 bg-bakground dark:bg-[#2a2a2a] border border-blue-600 shadow-md">
+            <div className="flex items-center justify-between rounded-[2rem] px-4 py-1.5 bg-bakground dark:bg-[#2a2a2a] border border-blue-600 shadow-md">
 
               {/* Textarea expansível e com scroll interno */}
               <textarea
@@ -175,9 +175,14 @@ useEffect(() => {
               {/* Botão de envio dentro do balão */}
               <button
                 type="submit"
-                className="ml-2 flex items-center justify-center w-9 h-9 bg-[#F2F2F2] text-black dark:bg-gray-700 dark:text-white rounded-full transition hover:opacity-80 shrink-0"
+                className={`ml-2 flex items-center justify-center w-9 h-9 rounded-full transition hover:opacity-80 shrink-0
+                  ${input.trim()
+                    ? 'bg-blue-600 text-white hover:bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500'
+                    : 'bg-[#F2F2F2] text-black dark:bg-gray-700 dark:text-white cursor-not-allowed'
+                  }
+                `}
               >
-                <ArrowUpIcon className="h-4 w-4" />
+                <ArrowUpIcon className="h-4 w-4"/>
               </button>
             </div>
           </div>
