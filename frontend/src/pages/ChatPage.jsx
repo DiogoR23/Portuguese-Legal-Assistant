@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Bars3Icon,
   PlusIcon,
-  PaperAirplaneIcon,
+  ArrowUpIcon ,
 } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import UserMenu from '@/components/UserMenu';
@@ -20,22 +20,25 @@ const ChatPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const textareaRef = useRef(null);
 
+  const [isAwaitingResponse, setIsAwaitingResponse] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isAwaitingResponse) return;
 
     const newMessage = { role: 'user', content: input.trim() };
     setMessages((prev) => [...prev, newMessage]);
-
-    const fakeResponse = {
-      role: 'assistant',
-      content: 'Ainda estou a pensar... em breve terei uma resposta com base na DRE!',
-    };
-    setTimeout(() => {
-      setMessages((prev) => [...prev, fakeResponse]);
-    }, 800);
-
     setInput('');
+    setIsAwaitingResponse(true);
+
+    setTimeout(() => {
+      const fakeResponse = {
+        role: 'assistant',
+        content: 'Ainda estou a pensar... em breve terei uma resposta com base na DRE!',
+      };
+      setMessages((prev) => [...prev, fakeResponse]);
+      setIsAwaitingResponse(false);
+    }, 800);
   };
 
   useEffect(() => {
@@ -62,9 +65,9 @@ useEffect(() => {
     <div className="h-screen overflow-hiden flex bg-background dark:bg-[#2a2a2a] text-foreground transition-colors duration-300">
       {/* Sidebar */}
       <aside
-        className={`border-r border-gray-700 transition-all duration-300 ease-in-out ${
+        className={`border-r border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out ${
           sidebarOpen ? 'w-64' : 'w-0'
-        } overflow-hidden bg-background dark:bg-[#2A2A30]`}
+        } overflow-hidden bg-[#F2F2F2] dark:bg-[#1f1f1f]`}
       >
         <div className="h-full flex flex-col p-4">
           <div className="flex items-center justify-between mb-4">
@@ -83,11 +86,11 @@ useEffect(() => {
             </button>
           </div>
 
-          <hr className="border-gray-700 mb-4 mt-2" />
+          <hr className="border-gray-300 dark:border-gray-700 mb-4 mt-2" />
           <p className="italic text-sm text-muted-foreground">Sem conversas ainda.</p>
 
           <div className="mt-auto pt-6">
-            <hr className="border-gray-700 mb-4" />
+            <hr className="border-gray-300 dark:border-gray-700 mb-4" />
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Tema</span>
               <ThemeToggle />
@@ -109,7 +112,7 @@ useEffect(() => {
       {/* Main */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between px-4 py-3 border-b border-gray-700 bg-background dark:bg-[#2a2a2a]">
+        <header className="flex items-center justify-between px-4 py-0.5 border-gray-700 bg-background dark:bg-[#2a2a2a]">
           <div className="flex-1" />
           <h1 className="text-xl font-bold text-center text-primary flex-1">Amel.IA</h1>
           <div className="flex justify-end flex-1">
@@ -121,7 +124,7 @@ useEffect(() => {
         <main className="flex-1 bg-background dark:bg-[#2a2a2a] overflow-hidden">
           <div className="h-full px-4 py-6 flex justify-center">
             <div
-              className="w-full max-w-2xl flex flex-col gap-4 overflow-y-auto rounded-md border border-transparent px-5 py-2 text-foreground bg-transparent leading-snug scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent"
+              className="w-full max-w-4xl flex flex-col gap-4 overflow-y-auto rounded-md border border-transparent px-5 py-2 text-foreground bg-transparent leading-snug scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent"
               style={{
                 maxHeight: 'calc(100vh - 172px)',
                 overflowY: 'auto',
@@ -130,10 +133,10 @@ useEffect(() => {
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
-                  className={`whitespace-pre-wrap break-words px-4 py-2 rounded-md max-w-xs ${
+                  className={`whitespace-pre-wrap break-words px-4 py-1 rounded-md ${
                     msg.role === 'user'
-                      ? 'bg-blue-700 text-white self-end'
-                      : 'text-foreground self-start'
+                      ? 'bg-blue-700 text-white self-end max-w-[80%]'
+                      : 'text-foreground self-start max-w-[80%]'
                   }`}
                 >
                   {msg.content}
@@ -145,12 +148,11 @@ useEffect(() => {
         </main>
 
         {/* Input */}
-        <form
-          onSubmit={handleSubmit}
-          className="px-4 py-4 border-t border-gray-700 bg-background dark:bg-[#2a2a2a]"
-        >
-          <div className="max-w-4xl mx-auto flex items-end gap-2">
-            <div className="flex-1 relative">
+        <form onSubmit={handleSubmit} className="px-4 py-4 bg-background dark:bg-[#2a2a2a]">
+          <div className="max-w-4xl mx-auto w-full">
+            <div className="flex items-end justify-between rounded-[2rem] px-4 py-1.5 bg-bakground dark:bg-[#2a2a2a] border border-blue-600 shadow-md">
+
+              {/* Textarea expansível e com scroll interno */}
               <textarea
                 ref={textareaRef}
                 rows={1}
@@ -163,19 +165,21 @@ useEffect(() => {
                     handleSubmit(e);
                   }
                 }}
-                className="w-full resize-none rounded-md border border-blue-600 px-5 py-2 text-foreground bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 leading-snug scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent"
+                className="w-full resize-none bg-transparent text-black dark:text-white px-1 pr-3 focus:outline-none scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent"
                 style={{
-                  maxHeight: '8.5rem',
+                  maxHeight: '10rem',
                   overflowY: 'auto',
                 }}
               />
+
+              {/* Botão de envio dentro do balão */}
+              <button
+                type="submit"
+                className="ml-2 flex items-center justify-center w-9 h-9 bg-[#F2F2F2] text-black dark:bg-gray-700 dark:text-white rounded-full transition hover:opacity-80 shrink-0"
+              >
+                <ArrowUpIcon className="h-4 w-4" />
+              </button>
             </div>
-            <button
-              type="submit"
-              className="bg-blue-700 hover:bg-blue-600 text-white rounded-full p-3 transition"
-            >
-              <PaperAirplaneIcon className="h-5 w-5" />
-            </button>
           </div>
         </form>
       </div>

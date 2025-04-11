@@ -56,7 +56,7 @@ const UserMenu = ({ onLogout }) => {
           </button>
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-700 dark:text-red-400"
+            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-500/20 dark:text-red-400"
           >
             <ArrowRightStartOnRectangleIcon className="h-5 w-5 inline-block mr-2" />
             Terminar Sessão
