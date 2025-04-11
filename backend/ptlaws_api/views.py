@@ -99,3 +99,15 @@ class ListConversationsMessagesView(APIView):
         serialized = MessageSerializer(messages, many=True)
 
         return Response(serialized.data)
+
+class DeleteConversationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, conversation_id):
+        conversation = Conversations.objects.filter(id_conversation=conversation_id, user_id=request.user.pk).first()
+
+        if not conversation:
+            return Response({'error': 'Conversation not Found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        conversation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
