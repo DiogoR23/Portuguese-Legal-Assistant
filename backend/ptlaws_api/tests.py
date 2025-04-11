@@ -56,6 +56,24 @@ class ChatViewsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(any(c["title"] == "Teste Listagem" for c in response.data))
 
+    def test_delete_conversation(self):
+        # Create a conversation manually
+        conversation = Conversations.create(
+            id_conversation=uuid.uuid4(),
+            user_id=self.user.user_id,
+            title="Delete teste",
+            created_at=timezone.now(),
+            message_ids=[]
+        )
+
+        url = f"/api/ai/conversations/{conversation.id_conversation}/"
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        remaining = Conversations.objects.filter(id_conversation=conversation.id_conversation).first()
+        self.assertIsNone(remaining)
+
     def test_list_messages_in_conversation(self):
         conversation = Conversations.create(
             id_conversation=uuid.uuid4(),
