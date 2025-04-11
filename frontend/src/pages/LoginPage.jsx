@@ -43,7 +43,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex">
       {/* Lado esquerdo */}
-      <div className="w-1/2 bg-[#13212F] flex justify-center items-center">
+      <div className="w-1/2 bg-[#01497C] flex justify-center items-center">
         <h1
           onClick={() => window.location.href = '/'}
           className="text-white text-4xl font-extrabold cursor-pointer hover:underline"
