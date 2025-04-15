@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserMenu from '@/components/UserMenu';
 import ThemeToggle from '@/components/ThemeToggle';
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -19,6 +19,8 @@ const HomePage = () => {
     setToken(null);
     navigate('/login');
   };
+
+  const username = localStorage.getItem('username');
 
   return (
     <div className="relative min-h-screen bg-white dark:bg-[#1f1f1f] text-black dark:text-white">
