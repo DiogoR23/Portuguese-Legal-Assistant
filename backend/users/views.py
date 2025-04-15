@@ -35,7 +35,8 @@ class LoginView(APIView):
             refresh = RefreshToken.for_user(user)
             return Response({
                 'access_token': str(refresh.access_token),
-                'refresh_token': str(refresh)
+                'refresh_token': str(refresh),
+                'username': user.username
             }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)

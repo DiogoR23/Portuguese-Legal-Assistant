@@ -58,11 +58,9 @@ class ChatView(APIView):
         return Response({
             'conversation_id': str(conversation.id_conversation),
             'message': [
-                MessageSerializer(user_msg).data,
-                MessageSerializer(ai_msg).data
+                MessageSerializer(ai_msg).data,
             ]
         }, status=status.HTTP_200_OK)
-
 
 
 class CreateConversationView(APIView):
@@ -89,7 +87,7 @@ class ListUserConversationsView(APIView):
         serialized = ConversationSerializer(conversations, many=True)
 
         return Response(serialized.data)
-
+ 
 
 class ListConversationsMessagesView(APIView):
     permission_classes = [IsAuthenticated]
