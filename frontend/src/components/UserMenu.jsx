@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { UserCircleIcon, ArrowRightStartOnRectangleIcon, HomeIcon } from '@heroicons/react/24/solid';
-import ThemeToggle from './ThemeToggle';
 import { useNavigate } from 'react-router-dom';
 
 const UserMenu = ({ onLogout }) => {
