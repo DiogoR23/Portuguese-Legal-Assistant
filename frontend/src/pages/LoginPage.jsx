@@ -21,13 +21,14 @@ const LoginPage = () => {
 
     try {
       const response = await loginUser(formData);
-      const { access, refresh, user } = response.data;
-      localStorage.setItem('access', access);
-      localStorage.setItem('refresh', refresh);
-      window.location.href = '/chat';
+      const { access_token, refresh_token, username } = response.data;
+      localStorage.setItem('access', access_token);
+      localStorage.setItem('refresh', refresh_token);
+      localStorage.setItem('username', username);
+      navigate("/chat");
     } catch (err) {
       const backendError = err.response?.data;
-    
+
       if (backendError?.detail) {
         setError(backendError.detail);
       } else if (backendError?.non_field_errors) {
@@ -35,10 +36,10 @@ const LoginPage = () => {
       } else {
         setError('Erro ao fazer login. Verifica as credenciais.');
       }
-    
+
       console.error('Erro no login:', backendError || err);
     }
-  };    
+  };
 
   return (
     <div className="min-h-screen flex">
