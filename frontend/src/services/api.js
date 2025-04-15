@@ -1,12 +1,12 @@
-import API from "./axiosInstance";
+import API from "@/services/axiosInstance";
 
 // Authentication
 export const loginUser = (data) => API.post("users/login/", data);
 export const registerUser = (data) => API.post("users/register/", data);
-export const sendMessage = (data) => API.post("ai/chat/", data);
 export const getUserInfo = () => API.get('protected/');
 
-// Conversations
+// AI Connection
+export const sendMessage = (payload) => API.post("ai/chat/", payload);
 export const fetchUserConversations = () => API.get("ai/conversations/");
 export const fetchConversationMessages = (converdsationId) => 
     API.get(`ai/conversations/${converdsationId}/messages`);
