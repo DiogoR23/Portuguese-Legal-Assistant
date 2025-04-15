@@ -9,16 +9,22 @@ import LayoutWithTheme from "./layouts/LayoutWithTheme";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Routes element={<LayoutWithTheme showFloatingToggle={true} />} />
+    <Routes>
+      {/* Public Routes */}
+      <Route element={<LayoutWithTheme />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/chat" element={<PrivateRoute><ChatPage /></PrivateRoute>} />
-      </Routes>
-    </Router>
-  );
+      </Route>
+      {/* Private Route */}
+      <Route element={<PrivateRoute />}>
+        <Route element={<LayoutWithTheme />}>
+          <Route path="/chat" element={<ChatPage />} />
+        </Route>
+      </Route>
+    </Routes>
+  )
 }
+
 
 export default App;
