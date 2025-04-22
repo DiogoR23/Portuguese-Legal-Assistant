@@ -52,18 +52,37 @@ const ChatPage = () => {
     } catch (err) {
       console.error("Erro ao criar nova conversa:", err);
     }
-  };
+  };  
 
   // Carregar mensagens de conversa existente
+  const AMELIA_WELCOME = {
+    role: 'assistant',
+    content: 'Olá! Sou a Amel.IA. Em que posso ajudar-te com a legislação portuguesa hoje?',
+  };
+  
   const loadConversation = async (id) => {
     try {
       const res = await fetchConversationMessages(id);
       setConversationId(id);
-      setMessages(res.data);
+  
+      const msgs = res.data;
+  
+      const isWelcomePresent =
+        msgs.length > 0 &&
+        msgs[0].role === 'assistant' &&
+        msgs[0].content.includes('Em que posso ajudar-te');
+  
+      if (!isWelcomePresent) {
+        setMessages([AMELIA_WELCOME, ...msgs]);
+      } else {
+        setMessages(msgs);
+      }
+  
     } catch (err) {
       console.error("Erro ao carregar mensagens:", err);
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,7 +116,6 @@ const ChatPage = () => {
   // Efeitos
   useEffect(() => {
     fetchConversations();
-    handleNewConversation(); // Cria conversa inicial
   }, []);
 
   useEffect(() => {
@@ -144,19 +162,19 @@ const ChatPage = () => {
             {conversations.length === 0 ? (
               <p className='italic text-sm text-muted foreground'>Sem conversas ainda.</p>
             ) : (
-              conversations.map((conv) => {
+              conversations.map((conv) => (
                 <button
-                  key={conv.id}
-                  onClick={() => loadConversation(conv.id)}
+                  key={conv.id_conversation}
+                  onClick={() => loadConversation(conv.id_conversation)}
                   className={`text-left text-sm px-3 py-2 rounded transition-all text-foreground 
                     ${conv.id === conversationId
                       ? 'bg-blue-600 text-white font-semibold'
                       : 'hover:bg-gray-300 dark:hover:bg-gray-700'
                     }`}
                 >
-                  {conv.title || `Conversa #${conv.id}`}
+                  {conv.title || `Conversa #${conv.id_conversation}`}
                 </button>
-              })
+              ))
             )}
           </div>
           <div className="mt-auto pt-6">
