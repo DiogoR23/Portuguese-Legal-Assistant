@@ -7,22 +7,22 @@ def create_conversation_and_first_message(user, user_message):
     def generate_title(text, word_limit=5):
         words = text.strip().split()
         return ' '.join(words[:word_limit]) + ('...' if len(words) > word_limit else '')
-    
-    # Create first message
-    first_message = Message.create(
-        id_message=uuid.uuid4(),
-        id_conversation=None,  # does not exist yet, will be updated later
-        sender='user',
-        content=user_message,
-        created_at=datetime.utcnow()
-    )
 
     # Create new conversation with dynamic title
     conversation = Conversations.create(
         id_conversation=uuid.uuid4(),
         user_id=user.pk,
         title=generate_title(user_message),
-        message_ids=[first_message.id_message],
+        message_ids=[],
+        created_at=datetime.utcnow()
+    )
+    
+    # Create first message
+    first_message = Message.create(
+        id_message=uuid.uuid4(),
+        id_conversation=conversation.id_conversation,
+        sender='user',
+        content=user_message,
         created_at=datetime.utcnow()
     )
 
