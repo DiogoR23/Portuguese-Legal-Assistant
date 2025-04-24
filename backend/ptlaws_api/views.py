@@ -109,3 +109,21 @@ class DeleteConversationView(APIView):
         
         conversation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UpdateConversationTitleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, conversation_id):
+        new_title = request.data.get('title', '').strip()
+        if not new_title:
+            return Response({'error': 'Title is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        conversation = Conversations.objects.filter(id_conversation=conversation_id, user_id=request.user.pk).first()
+        if not conversation:
+            return Response({'error': 'Conversation not Found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        conversation.title = new_title
+        conversation.save()
+
+        return Response({'message': 'Title updated successfully.'}, status=status.HTTP_200_OK)
+
