@@ -36,7 +36,7 @@ def hybrid_retriever(session, vstore, keyspace):
 
         hybrid_retriever = EnsembleRetriever(
             retrievers=[retriever_bm25, vstore_retriever],
-            wights=[0.5, 0.5]
+            weights=[0.5, 0.5]
         )
 
         return hybrid_retriever
