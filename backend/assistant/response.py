@@ -79,7 +79,9 @@ def get_ai_response(user_input):
             api_key=OPENAI_API_KEY,
             base_url=BASE_URL,
             model="RichardErkhov/mistralai_-_Mistral-7B-Instruct-v0.3-gguf",
-            temperature=0.8
+            temperature=0.0,
+            frequency_penalty=0.2,
+            presence_penalty=0.0
         )
 
         agent = create_openai_tools_agent(llm=llm, tools=tools, prompt=prompt_template)
