@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle';
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const HomePage = () => {
   const username = localStorage.getItem('username');
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-[#1f1f1f] text-black dark:text-white">
+    <div className="relative min-h-screen max-h-screen overflow-y-auto bg-white dark:bg-[#1f1f1f] text-black dark:text-white scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent hover:scollbar-thumb-neutral-500 transition-all duration-300 ease-in-out">
       <div className="absolute top-4 right-4 z-50">
         <ThemeToggle floating />
       </div>
@@ -109,12 +109,22 @@ const HomePage = () => {
         <section className="max-w-4xl mx-auto text-center py-16 px-4">
           <h2 className="text-2xl font-bold text-black dark:text-white mb-6">Porquê usar a Amel.IA?</h2>
           <ul className="grid md:grid-cols-2 gap-6 text-left text-gray-800 dark:text-gray-300">
-            <li>✅ Especializada em legislação portuguesa</li>
-            <li>✅ Acesso instantâneo à informação legal</li>
-            <li>✅ Respostas baseadas em documentos oficiais</li>
-            <li>✅ Sem linguagem jurídica complexa</li>
-            <li>✅ Disponível 24/7, sem burocracia</li>
-            <li>✅ Ideal para estudantes, advogados e cidadãos curiosos</li>
+            {[
+              'Especializada em legislação portuguesa',
+              'Acesso instantâneo à informação legal',
+              'Respostas baseadas em documentos oficiais',
+              'Sem linguagem jurídica complexa',
+              'Disponível 24/7, sem burocracia',
+              'Ideal para estudantes, advogados e cidadãos curiosos',
+            ].map((item, idx) => (
+              <li
+                key = {idx}
+                className = "flex items-start gap-2"
+              >
+                <CheckBadgeIcon className="h-5 w-5 mt-1 text-[#01497C] dark:text-[#66bfff]" />
+                <span> { item } </span>
+              </li>
+            ))}
           </ul>
         </section>
 
