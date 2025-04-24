@@ -12,6 +12,15 @@ class MessageSerializer(serializers.Serializer):
         model = Message
         fields = ['id_message', 'id_conversation', 'sender', 'content', 'created_at']
 
+    def to_representation(self, instance):
+        return {
+            "id": str(instance.id_message),
+            "conversation_id": str(instance.id_conversation),
+            "role": instance.sender,
+            "content": instance.content,
+            "created_at": instance.created_at.isoformat(),
+        }
+
 
 class ConversationSerializer(serializers.Serializer):
     id_conversation = serializers.UUIDField()
