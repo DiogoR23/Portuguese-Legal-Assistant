@@ -1,3 +1,18 @@
+/*
+ConversationItemMenu.jsx
+
+This component renders a context menu for conversation items.
+It includes options to rename or delete the conversation.
+It uses the Heroicons library for icons and React hooks for managing state and effects.
+It listens for clicks outside the menu to close it.
+Props:
+- top: The top position of the menu.
+- left: The left position of the menu.
+- onRename: Function to call when the rename option is clicked.
+- onDelete: Function to call whenr the delete option is clicked.
+- closeMenu: Function to call to close the menu.
+*/
+
 import React, { useEffect, useRef } from 'react';
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 

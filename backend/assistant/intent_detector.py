@@ -1,3 +1,17 @@
+"""
+intent_detector.py
+
+This module defines the IntentDetector class, which is responsible for detecting the intent of user input.
+
+The class uses a set of predefined keywords and patterns to classify the input into different categories:
+- Greeting: Identifies if the user is greeting the assistant.
+- Legal Query: Identifies if the user is asking a legal question or seeking legal information.
+- Unknown: If the input does not match any known patterns or keywords, it is classified as unknown.
+
+The detect method takes a user input string and returns the detected intent as a string.
+
+The class is used in the get_ai_response function to classify user input before generating a response.
+"""
 import re
 
 class IntentDetector:

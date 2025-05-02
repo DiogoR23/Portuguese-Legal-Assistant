@@ -1,3 +1,14 @@
+/*
+ChatPage.jsx
+
+This file contains the main chat interface for the Amel.IA application.
+It includes the sidebar for conversation management, the chat area for displaying messages, and the input area for sending new messages.
+The sidebar allows users to create, load, rename, and delete conversations.
+The chat area displays messages from the user and the assistant, with a typing indicator when the assistant is generating a response.
+The input area allows users to type and send messages, with support for resizing the textarea and canceling ongoing requests.
+The sidebar can be toggled open or closed, and the user can also access a user menu for account settings.
+*/
+
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Bars3Icon,

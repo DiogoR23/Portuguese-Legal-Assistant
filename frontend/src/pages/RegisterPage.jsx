@@ -1,3 +1,16 @@
+/*
+RegisterPage.jsx
+
+This file contains the RegisterPage component, which is responsible for rendering the registration form.
+It includes input fields for username, email, password, and confirm password.
+The component handles form submission, validation, and error handling.
+It uses the registerUser function from the API service to send the registration data to the backend.
+The component also includes a toggle for showing/hiding the password input fields.
+The component is styled using Tailwind CSS classes for a responsive and modern design.
+The left side of the page displays the application name, while the right side contains the registration form.
+The component uses React Router's useNavigate hook to navigate to the login page upon successful registration.
+*/
+
 import React, { useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';

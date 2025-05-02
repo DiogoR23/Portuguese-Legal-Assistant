@@ -1,3 +1,15 @@
+/*
+index.css
+
+This file is used to import the Tailwind CSS styles and define custom styles for the application.
+It includes the base styles, components, and utilities provided by Tailwind CSS.
+It also defines custom CSS variables for light and dark themes, which are used throughout the application.
+The CSS variables are defined in the :root selector for light mode and in the .dark selector for dark mode.
+The :root selector is used to define global CSS variables that can be accessed throughout the application.
+The .dark selector is used to define CSS variables that are applied when the dark class is added to the HTML element.
+The CSS variables are used to define colors, backgrounds, borders, and other styles for the application.
+*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

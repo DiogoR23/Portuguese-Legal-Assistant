@@ -1,3 +1,16 @@
+"""
+run_scraper.py
+
+This script is the entry point for the web scraping application.
+It initializes the Cassandra session, clears the existing table, and starts the web crawling process.
+
+It also handles logging and error management.
+The script uses the `asyncio` library to run the asynchronous web crawling function.
+It loads environment variables for the Cassandra connection parameters.
+It uses the `dotenv` library to load environment variables from a `.env` file.
+The script is designed to be run as a standalone program.
+"""
+
 from session import CreateCassandraSession 
 from scraper import crawl_site
 import logging

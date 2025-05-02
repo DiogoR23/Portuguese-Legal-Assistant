@@ -1,3 +1,15 @@
+"""
+extactor.py
+
+This module contains functions to extract data from a webpage using the Playwright Library.
+It uses BeautifulSoup to parse the HTML content and extract the title and content of the page.
+`extract_data_from_page` function is used to extract the title and content from a given page URL.
+`extract_links` function is used to extract all the links from a giver page.
+
+It uses the Playwright library to navigate to the page and extract the HTML content.
+It also uses the BeautifulSoup library to parse the HTML content and extract the title and content of the page.
+"""
+
 from bs4 import BeautifulSoup
 
 import logging

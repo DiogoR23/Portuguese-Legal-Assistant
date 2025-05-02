@@ -1,3 +1,19 @@
+"""
+views.py
+
+This file contains the views for the chat application. It includes the following views:
+1. ChatView: Handles the chat functionality, including sending and receiving messages.
+2. CreateConversationView: Handles the creation of new conversations.
+3. ListUserConversationsView: Lists all conversations for a user.
+4. ListConversationsMessagesView: Lists all messages in a specific conversation.
+5. DeleteConversationView: Deletes a specific conversation.
+6. UpdateConversationTitleView: Updates the title of a specific conversation.
+
+Each view is implemented as a class-based view using Django REST Framework's APIView. The views handle HTTP requests and responses, including validation of input data and error handling.
+The views use serializers to convert model instances to JSON format and vice versa. The views also use Django's built-in permissions to restrict access to authenticated users only.
+They inteact with the database using Django's ORM to create, retrieve, update, and delete conversation and message records.
+"""
+
 # Importing from Django
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated

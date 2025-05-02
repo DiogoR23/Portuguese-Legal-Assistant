@@ -1,3 +1,25 @@
+"""
+tests.py
+
+This file contains the test cases for the user authentication system.
+
+It includes tests for user registration, login, token refresh, and access to protected routes.
+The tests use Django's TestCase and DRF's APIClient to simulate requests and check responses.
+The tests ensure that the authentication system works as expected and that users can register, log in, and access protected resources.
+The tests also check that the correct status codes and response data are returned for each operation.
+The test cases are organized into a single class, UserAuthTests, which contains methods for each test case.
+
+Tests:
+- test_register_user: Tests user registration.
+- test_login_user: Tests user login.
+- test_access_protected_route: Tests access to a protected route after login.
+- test_refresh_token: Tests token refresh functionality.
+
+This file is part of the Django REST Framework authentication system.
+It is designed to work with the Django framework and the Django REST Framework (DRF).
+It is important to ensure that the authentication system is secure and functions correctly.
+"""
+
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status

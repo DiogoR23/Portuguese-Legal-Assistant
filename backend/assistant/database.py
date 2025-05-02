@@ -1,3 +1,21 @@
+"""
+database.py
+
+This module defines functions for interacting with a Cassandra database.
+It includes functions to connect to the database, view data, drop tables, clear tables, remove keyspaces, check table structure, and save user input and AI responses to the database.
+
+The functions are designed to be used in a legal assistant application, where user questions and AI answers are stored in a Cassandra database for further analysis and retrieval.
+
+The functions are:
+- connecto to cassandra: Establishes a connection to the Cassandra database.
+- view_data: Views data from a specific table and keyspace.
+- drop_table: Drops a table if it exists.
+- clear_table: Clears the information of a specific Cassandra table.
+- keyspace_remove: Removes a keyspace.
+- check_table: Shows the columns for the corresponding keyspace table.
+- save_answer_questions: Saves user input (questions) and AI responses to the corresponding keyspace table.
+"""
+
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 import os

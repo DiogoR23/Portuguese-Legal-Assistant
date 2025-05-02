@@ -1,3 +1,14 @@
+"""
+models.py
+
+This module contains the User model and the custom user manager for the application.
+It defines the Users class, which inherits from AbstractBaseUser and PermissionsMixin, and provides methods for creating regular and superuser accounts.
+It also includes a custom user manager for handling user creation and management.
+The Users class includes fields for user ID, email, username, and flags for active and staff status.
+
+This file is part of the backend application for managing user accounts and authentication.
+"""
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 

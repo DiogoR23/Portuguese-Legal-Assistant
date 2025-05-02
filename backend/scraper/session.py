@@ -1,3 +1,15 @@
+"""
+session.py
+
+This module contains the CreateCassandraSession class, which is responsible for creating a session to the Cassandra database.
+It includes methods for creating keyspaces and tables, saving data, clearing tables, listing keyspaces and tables, viewing table data, removing keyspaces, and checking vector store data.
+
+It also includes methods for formatting article data for chat display, dropping tables, truncating tables, and executing queries.
+It uses the Cassandra driver to connect to the database and perform operations.
+The class is initialized with a username and password for authentication.
+It is designed to be used in a web scraping context, where data is scraped from websites and stored in a Cassandra database for later retrieval and analysis.
+"""
+
 import logging
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider

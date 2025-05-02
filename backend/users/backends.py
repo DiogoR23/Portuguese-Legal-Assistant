@@ -1,3 +1,11 @@
+"""
+backends.py
+
+Custom authentication backend for Django that allows users to log in using their email address instead of a username.
+This backend extends the default ModelBackend to authenticate users based on their email address.
+This is useful for applications where users may not have a username or prefer to use their email for authentication.
+"""
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 

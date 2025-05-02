@@ -1,3 +1,19 @@
+"""
+scraper.py
+
+This module contains the main logic for crawling a website and extracting data from it.
+
+It also includes a retry mechanism to handle transient errors and a random delay between requests to avoid being blocked by the server.
+The crawler starts from a given URL and follows links to extract data from each page.
+
+The extracted data is saved to a Cassandra database using the provided session object.
+The crawler uses Playwright to handle JavaScript-rendered pages and simulate a real user.
+It is designed to be run asynchronously, allowing for concurrent requests and efficient use of resources.
+It is configured to run in headless mode by default, but this can be changed for debugging purposes.
+It is designed to be run in a separate thread or process to avoid blocking the main application.
+It uses a set to keep track of visited URLs to avoid revisiting them.
+"""
+
 from extractor import extract_data_from_page, extract_links
 
 from playwright.async_api import async_playwright

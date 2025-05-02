@@ -1,9 +1,20 @@
+"""
+rag_pipeline.py
+
+This module defines the functions responsible for creating a RAG (Retrieval-Augmented Generation) pipeline
+using a hybrid retriever. The pipeline combines a BM25 retriever with a vector store retriever to provide a more comprehensive retrieval mechanism.
+
+The function include:
+- bm25_Retriever: Creates a BM25 retriever from the data in the Cassandra database.
+- hybrid_retriever: Combines the BM25 retriever and the vector store retriever into a hybrid retriever using EnsembleRetriever.
+- rag_tool: Creates a retriever tool using the hybrid retriever and returns it for use in the RAG pipeline.
+"""
+
 from langchain.tools.retriever import create_retriever_tool
 from langchain.retrievers import EnsembleRetriever
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.documents import Document
 import logging
-from cassandra.query import SimpleStatement
 
 
 def bm25_Retriever(session, keyspace):

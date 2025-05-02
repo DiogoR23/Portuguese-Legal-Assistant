@@ -1,3 +1,15 @@
+/*
+AuthForm.jsx
+
+
+This component is responsible for rendering the authentication form (login or register) and managing the form state, including validation and sending data to the API.
+
+It uses the `useState` hook to manage the form data, loading state, and error messages. The `handleChange` function updates the form data as the user types, while the `handleSubmit` function handles form submission, including API calls for login and registration.
+It also handles the response from the API, storing the access and refresh tokens in local storage upon successful authentication. The component conditionally renders the form fields based on whether the user is logging in or registering.
+This file is part of the Chat Application project.
+*/
+
+
 import React, { useState } from 'react';
 import { loginUser, registerUser } from '../services/api';
 

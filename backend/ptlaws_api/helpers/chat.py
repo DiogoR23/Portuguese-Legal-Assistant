@@ -1,3 +1,18 @@
+"""
+chat.py
+
+This module contains helper functions for managing chat conversations and messages.
+It includes functions to create a new conversation and its first message, as well as to generate a title for the conversation based on the user's message.
+
+Functions:
+- create_conversation_and_first_message(): Creates a new conversation and its first message.
+- generate_title(): Generates a title for the conversation based on the user's message.
+
+Dependencies:
+- uuid: For generating unique identifiers for conversations and messages.
+- datetime: For handling date and time. 
+"""
+
 from ..models import Conversations, Message
 import uuid
 from datetime import datetime

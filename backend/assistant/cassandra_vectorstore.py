@@ -1,3 +1,18 @@
+"""
+cassandra_vectorstore.py
+
+This module defines the function connect_vstore, responsible for creating a Cassandra vector store.
+It uses the OpenAIEmbeddings class to create embeddings for the text data and sets up a connection to the Cassandra database.
+The function takes a Cassandra session as an argument and returns a Cassandra vector store instance.
+The function also handles the setup mode for the vector store, allowing for different modes of operation.
+
+The function connect_vstore is used to create a Cassandra vector store from a giver session.
+
+The function is used in the get_ai_response function to create a vector store for the RAG pipeline.
+
+This function is used to create a Cassandra Vector Store from a session.
+"""
+
 import os
 from dotenv import load_dotenv
 import logging

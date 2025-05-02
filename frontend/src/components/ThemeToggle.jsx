@@ -1,3 +1,13 @@
+/*
+ThemeToggle.jsx
+
+This component is a toggle button for switching between light and dark themes.
+It uses localStorage to remember the user's preference and applies the theme to the document.
+The component uses the Heroicons library for the icons representing the themes.
+Props:
+- floating: A boolean that determines if the button should be fixed in the top-right corner of the screen.
+*/
+
 import React, { useEffect, useState } from 'react';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 

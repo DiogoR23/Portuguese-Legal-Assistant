@@ -1,3 +1,19 @@
+/*
+api.js
+
+This file contains all the API calls to the backend.
+It uses the axiosInstance to make requests to the backend.
+The API calls are organized into different sections based on their functionality.
+1. Authentication
+2. AI Connection
+3. User Conversations
+4. Conversation Messages
+6. Conversation Deletion
+7. Conversation Update
+8. Conversation Creation
+9. Conversation Fetching
+*/
+
 import API from "@/services/axiosInstance";
 
 // Authentication

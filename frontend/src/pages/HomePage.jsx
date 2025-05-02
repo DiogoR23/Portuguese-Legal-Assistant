@@ -1,3 +1,12 @@
+/*
+HomePage.jsx
+
+This file contains the HomePage component, which serves as the landing page for the application.
+It includes a hero section, information about the AI assistant, and a call to action for users to log in or register.
+The component uses React hooks for stsate management and side effects, and it utilizes React Router for navigation.
+The page is styled using Tailwind CSS for a responsive and modern design.
+*/
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle';

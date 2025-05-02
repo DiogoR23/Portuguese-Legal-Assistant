@@ -1,3 +1,15 @@
+/*
+axiosInstance.js
+
+This file creates on Axios instance with interceptors to handle JWT tokens for authentication.
+It checks if the token is expired before making a request and refreshes it if necessary.
+It also handles 401 errors by attempting to refresh the token and retrying the request.
+The code uses the jwt-decode library to decode the JWT token and check its expiration.
+It is important to note that this code assumes the presence of a backend API that supports JWT authentication and provides endpoints for login, registration, and token refresh.
+The code is structured to handle public endpoints separately, allowing unauthenticated access to certain routes like login and registration.
+This code is a part of a larger application and should be used in conjunction with other components such as user authentication, registration, and token management.
+*/
+
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 

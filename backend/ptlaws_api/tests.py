@@ -1,3 +1,22 @@
+"""
+tests.py
+
+This file contains unit tests for the chat views in the PT Laws API.
+It includes tests for creating conversations, sending messages, listing conversation, deleting conversation, and listing messages in a conversation.
+The tests use Django's TestCase and the Django REST Framework's APIClient to simulate requests to the API endpoints.
+They are designed to ensure that the API behaves as expected and returns the correct status codes and data.
+
+The tests cover the following scenarios:
+- Creating a conversation manually
+- Sending a message to the AI and creating a conversation
+- Listing all conversations for a user
+- Deleting a conversation
+- Listing messages in a conversation
+- Each test case sets up the necessary data and authentication before making requests to the API.
+The tests are run using Django's test runner, and the results are reported in the console.
+This file is part of the PT Laws API project.
+"""
+
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse

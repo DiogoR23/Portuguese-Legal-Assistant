@@ -1,3 +1,10 @@
+/*
+LoginPage.jsx
+
+This component represents the login page of the application. It allows users to enter their email and password to access the system. The component also handles error display and toggling between showing and hiding the password.
+It uses React hooks for state management and the Heroicons library for icons. The login functionality is handled by the `loginUser` function from the API services, which sends the login request to the backend. Upon successful login, the user is redirected to the chat page, and their tokens are stored in local storage for authentication purposes.
+*/
+
 import React, { useState } from 'react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';

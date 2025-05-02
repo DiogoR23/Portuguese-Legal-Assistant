@@ -11,6 +11,7 @@ The function handles:
 - Processing the user input and generating a structured, professional answer.
 - Incorporating an intent detection layer to classify the user input before generating a response.
 
+This function is used in the main application to handle user queries and provide legal information.
 """
 
 from .database import connect_to_cassandra

@@ -1,3 +1,15 @@
+"""
+serializers.py
+
+This module contains serializers for the Users app.
+It includes serializers for user registration, login, and user details.
+
+The serializers are used to validate and serialize data for the Users app.
+- RegisterSerializer: Used for user registration.
+- LoginSerializer: Used for user login.
+- UserSerializer: Used for serializing user details.
+"""
+
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password

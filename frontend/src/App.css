@@ -1,3 +1,17 @@
+/*
+App.css
+
+This file contains the CSS styles for the React application.
+It includes styles for the root element, logo, and card components.
+It also includes a keyframe animation for the logo spin effect.
+The styles are designed to create a visually appealing layout and enhance user experience.
+The logo has a hover effect that adds a drop shadow, and the card component has padding for better spacing.
+The read-the-docs link is styled with a muted color.
+The media query at the end applies the logo spin animation only if the user has not set a preference for reduced motion.
+The logo spin animation is set to run infinitely with a duration of 20 seconds.
+This file is part of the React application and is used to style the components.
+*/
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

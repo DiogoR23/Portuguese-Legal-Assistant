@@ -1,3 +1,12 @@
+/*
+UserMenu.jsx
+
+This component renders a user menu with a profile icon. When clicked, it displays a dropdown menu with the user's name and options to nabigate to the home page or log out. The component uses React hooks for state management and event handling.
+It also uses the Heroicons library for icons and React Router for navigation.
+The component is styled with Tailwind CSS classes for a modern and responsive design. The menu closes when clicking outside of it, and the user's name is retrieved from local storage.
+The component is designed to be reusable and can be easily integrated into any part of the application where a user menu is needed.
+*/
+
 import React, { useState, useEffect, useRef } from 'react';
 import { UserCircleIcon, ArrowRightStartOnRectangleIcon, HomeIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';

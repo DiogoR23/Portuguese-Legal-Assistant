@@ -1,3 +1,18 @@
+"""
+views.py
+
+This module contains the views for user registration, login, and protected routes.
+It uses Django REST Framework to handle HTTP requests and responses.
+The views are designed to work with the Users model and serializers defined in the same app.
+
+The views include:
+- RegisterView: Handles user registration.
+- LoginView: Handles user login and token generation.
+- ProtectedView: A protected route that requires authentication.
+
+It returns user information if the request is authenticated.
+"""
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
