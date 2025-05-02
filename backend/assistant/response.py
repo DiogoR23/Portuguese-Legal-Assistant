@@ -1,29 +1,62 @@
-from .database import connect_to_cassandra, save_answer_question
+"""
+response.py
+
+This module defines the function get_ai_response, responsible for processing user input
+and generating a legal response using a RAG (Retrieval-Augmented Generation) architecture
+specialized in Portuguese law.
+
+The function handles:
+- Connecting to Cassandra database and vector store.
+- Building a LangChain agent with a retriever tool.
+- Processing the user input and generating a structured, professional answer.
+- Incorporating an intent detection layer to classify the user input before generating a response.
+
+"""
+
+from .database import connect_to_cassandra
 from .cassandra_vectorstore import connect_vstore
 from .rag_pipeline import rag_tool
+from .intent_detector import IntentDetector
 
-from cassandra.cluster import Cluster
-from django.utils import timezone
 from langchain.agents import AgentExecutor, create_openai_tools_agent
-from langchain_community.vectorstores import Cassandra
-from langchain_community.utilities.cassandra import SetupMode
 from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
-from langchain.tools.retriever import create_retriever_tool
 
 from dotenv import load_dotenv
 import logging
 import os
+
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_URL = os.getenv("BASE_URL")
 CASSANDRA_KEYSPACE = os.getenv("CASSANDRA_KEYSPACE")
 
-def get_ai_response(user_input):
-    """Process user input and return an AI response."""
+
+def get_ai_response(user_input: str):
+    """
+    Processes the user's input and returns an AI-generated response based on Portuguese law.
+
+    Args:
+        user_input (str): The input message from the user.
+
+    Returns:
+        str: The AI-generated response, or a greeting or error message depending on the intent detected.
+    """
     try:
+        # Initialize Intent Detector
+        detecor = IntentDetector()
+        intent = detecor.detect(user_input)
+
+        # Îf it is a simple greeting, do not call the RAG service
+        if intent == "greeting":
+             "Olá! Em que posso ajudá-lo hoje? Sinta-se à vontade para colocar a sua dúvida ou questão jurídica."
+        
+        # If the input is unknown
+        if intent == "unknown":
+            return "Sou um assistente jurídico especializado na legislação Portuguesa. Por favor, coloque a sua dúvida jurídica para que eu possa ajudá-lo."
+
+        # If the input is legal_query, than call the LLM and RAG to answer the question 
         session = connect_to_cassandra()
 
         vstore = connect_vstore(session=session)
@@ -47,28 +80,32 @@ def get_ai_response(user_input):
         input_variables = ["input", "context", "agent_scratchpad"]
 
         template = """
-            You are a legal assistant specialized in finding and explaining laws precisely. 
-            Whenever you provide an answer that refers to a specific law or article, immediately cite the article code and title, right after mentioning it.
-            You should base your answer only on the information below. If the information is not there, **do not make it up**, just say that you did not find enough data.
-            Focus solely on providing the correct answer.
-            Speak only in Portuguese.
+            Você é um Assistente Jurídico especializado em leis portuguesas.
 
-            **Available Context**:
-            {context} # This context include detailed legal references including articles code and titles
+            **Função Principal:**
+            - Responder de forma clara, precisa e objetiva, com base na legislação portuguesa e no contexto fornecido.
+            - Identificar o artigo de lei mais relevante sempre que possível.
 
-            **User Input**:
+            **Comportamento Esperado:**
+            - Cite o artigo de lei relevante, se disponível, no formato: "Artigo [número]º do [Código] - '[Título do artigo]'".
+            - Nunca invente informações; se o contexto não tiver dados suficientes, informe educadamente o utilizador.
+
+            **Nota obrigatória ao final da resposta:**
+            > "Esta resposta foi gerada por um Assistente de Inteligência Artificial. Para aconselhamento jurídico definitivo, recomenda-se a consulta a um advogado ou profissional especializado na área."
+
+            **Contexto:**
+            {context}
+
+            **Pergunta do Utilizador:**
             {input}
 
-            **Instructions for Responding**:
-            - **Contextualize** the answer based on the information provided.
-            - **Explain clearly and objectively**, especially when citing laws.
-            - **When referring to laws or articles**, immediately cite the **article code** and **title**, for example:
-                - "Artigo 213º do Código Civil - 'Divórcio e separação de bens'"
-            - **If the answer is inconclusive or more data or documents are required, state that more context is needed.**
-            - **If the cited article is not directly applicable, explain why it is not relevant.**
+            **Instruções de Resposta:**
+            - Contextualize a resposta com base nos dados fornecidos.
+            - Seja claro, objetivo e cordial.
+            - Inclua sempre a nota final de responsabilidade.
 
             {agent_scratchpad}
-        """
+    """
 
         prompt_template = PromptTemplate(
             input_variables=input_variables,
