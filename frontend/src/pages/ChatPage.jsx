@@ -187,7 +187,7 @@ const ChatPage = () => {
             <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
               <Bars3Icon className="h-6 w-6" />
             </button>
-            <button onClick={handleNewConversation} className="flex items-center gap-2 text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 p-2 rounded">
+            <button onClick={handleNewConversation} className="flex items-center gap-2 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded">
               Nova Conversa <PlusIcon className="h-4 w-4" />
             </button>
           </div>
