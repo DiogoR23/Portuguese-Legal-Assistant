@@ -14,8 +14,6 @@ import logging
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.policies import DCAwareRoundRobinPolicy
-from cassandra.query import BatchStatement
-import uuid
 
 
 class CreateCassandraSession():
