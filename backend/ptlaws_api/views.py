@@ -16,10 +16,9 @@ They inteact with the database using Django's ORM to create, retrieve, update, a
 
 # Importing from Django
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.conf import settings
 
 # Importing from local files
 from assistant.response import get_ai_response
