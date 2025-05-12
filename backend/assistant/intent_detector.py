@@ -21,9 +21,10 @@ class IntentDetector:
         ]
 
         self.legal_keywords = [
-            "artigo", "lei", "código", "direito", "obrigação", "contrato", "responsabilidade",
-            "testamento", "herança", "divórcio", "casamento", "sucessão", "penal", "civil",
-            "trabalho", "constituição", "empresa", "negócio", "sociedade", "tributário", "impostos"
+            "artigo", "lei", "código", "direito", "obrigação", "contrato", "responsabilidade", "testamento",
+            "herança", "divórcio", "casamento", "sucessão", "penal", "civil", "trabalho", "constituição",
+            "empresa", "negócio", "sociedade", "tributário", "impostos", "regulamentação", "licenciamento",
+            "jurisprudência", "rendimentos", "contratual"
         ]
 
         self.legal_patterns = [
