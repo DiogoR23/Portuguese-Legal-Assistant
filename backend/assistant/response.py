@@ -51,8 +51,8 @@ def get_ai_response(user_input: str):
 
         # Îf it is a simple greeting, do not call the RAG service
         if intent == "greeting":
-             "Olá! Em que posso ajudá-lo hoje? Sinta-se à vontade para colocar a sua dúvida ou questão jurídica."
-        
+            return "Olá! Em que posso ajudá-lo hoje? Sinta-se à vontade para colocar a sua dúvida ou questão jurídica."
+
         # If the input is unknown
         if intent == "unknown":
             return "Sou um assistente jurídico especializado na legislação Portuguesa. Por favor, coloque a sua dúvida jurídica para que eu possa ajudá-lo."
