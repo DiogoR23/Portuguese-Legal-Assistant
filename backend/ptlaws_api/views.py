@@ -60,6 +60,9 @@ class ChatView(APIView):
 
         # AI Response
         ai_response_text = get_ai_response(user_message)
+        if not isinstance(ai_response_text, str):
+            return ValueError("Invalid response from AI service.")
+
         ai_msg = Message.create(
             id_message=uuid.uuid4(),
             id_conversation=conversation.id_conversation,
@@ -108,10 +111,27 @@ class ListConversationsMessagesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, conversation_id):
-        messages = Message.objects.filter(id_conversation=conversation_id).all()
-        serialized = MessageSerializer(messages, many=True)
+        if not isinstance(conversation_id, uuid.UUID):
+            try:
+                conversation_id = uuid.UUID(str(conversation_id))
+            except (ValueError, AttributeError):
+                return Response({'error': 'Invalid conversation_id.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        conversation = Conversations.objects.filter(
+            id_conversation=conversation_id,
+            user_id=request.user.pk
+        ).first()
+
+        if not conversation:
+            return Response({'error': 'Conversation not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        messages = sorted(
+            Message.objects.filter(id_conversation=conversation_id).all(),
+            key=lambda x: x.created_at
+        )
+        serialized = MessageSerializer(messages, many=True)
         return Response(serialized.data)
+
 
 class DeleteConversationView(APIView):
     permission_classes = [IsAuthenticated]
