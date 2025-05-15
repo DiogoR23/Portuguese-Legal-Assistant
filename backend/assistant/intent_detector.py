@@ -17,7 +17,7 @@ import re
 class IntentDetector:
     def __init__(self):
         self.greetings = [
-            'olá', 'bom dia', 'boa tarde', 'boa noite', 'tudo bem', 'oi', 'boas', 'ola', 'como estas'
+            'olá', 'bom dia', 'boa tarde', 'boa noite', 'tudo bem', 'oi', 'boas', 'ola', 'como estás', 'como estas'
         ]
 
         self.legal_keywords = [
