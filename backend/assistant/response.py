@@ -21,7 +21,7 @@ from .intent_detector import IntentDetector
 
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
+from langchain.prompts.chat import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 
 from dotenv import load_dotenv
 import logging
@@ -44,6 +44,12 @@ def get_ai_response(user_input: str):
     Returns:
         str: The AI-generated response, or a greeting or error message depending on the intent detected.
     """
+
+    session = None
+    tool = None
+    vstore = None
+    agent_executor = None
+
     try:
         # Initialize Intent Detector
         detecor = IntentDetector()
@@ -51,11 +57,11 @@ def get_ai_response(user_input: str):
 
         # Îf it is a simple greeting, do not call the RAG service
         if intent == "greeting":
-            return "Olá! Em que posso ajudá-lo hoje? Sinta-se à vontade para colocar a sua dúvida ou questão jurídica."
+            return str("Olá! Em que posso ajudá-lo hoje? Sinta-se à vontade para colocar a sua dúvida ou questão jurídica.")
 
         # If the input is unknown
         if intent == "unknown":
-            return "Sou um assistente jurídico especializado na legislação Portuguesa. Por favor, coloque a sua dúvida jurídica para que eu possa ajudá-lo."
+            return str("Sou um assistente jurídico especializado na legislação Portuguesa. Por favor, coloque a sua dúvida jurídica para que eu possa ajudá-lo.")
 
         # If the input is legal_query, than call the LLM and RAG to answer the question 
         session = connect_to_cassandra()
@@ -78,55 +84,42 @@ def get_ai_response(user_input: str):
         )
         tools = [tool]
 
-        input_variables = ["input", "context", "agent_scratchpad"]
 
-        template = """
-            Você é um Assistente Jurídico especializado em leis portuguesas.
-
-            **Função Principal:**
-            - Responder de forma clara, precisa e objetiva, com base na legislação portuguesa e no contexto fornecido.
-            - Identificar o artigo de lei mais relevante sempre que possível.
-
-            **Comportamento Esperado:**
-            - Cite o artigo de lei relevante, se disponível, no formato: "Artigo [número]º do [Código] - '[Título do artigo]'".
-            - Nunca invente informações; se o contexto não tiver dados suficientes, informe educadamente o utilizador.
-
-            **Nota obrigatória ao final da resposta:**
-            > "Esta resposta foi gerada por um Assistente de Inteligência Artificial. Para aconselhamento jurídico definitivo, recomenda-se a consulta a um advogado ou profissional especializado na área."
-
-            **Contexto:**
-            {context}
-
-            **Pergunta do Utilizador:**
-            {input}
-
-            **Instruções de Resposta:**
-            - Contextualize a resposta com base nos dados fornecidos.
-            - Seja claro, objetivo e cordial.
-            - Inclua sempre a nota final de responsabilidade.
-
-            {agent_scratchpad}
-    """
-
-        prompt_template = PromptTemplate(
-            input_variables=input_variables,
-            template=template
-        )
+        prompt = ChatPromptTemplate.from_messages([
+            SystemMessagePromptTemplate.from_template(
+                "Você é um Assistente Jurídico especializado em leis portuguesas. "
+                "Baseie-se preferencialmente no contexto fornecido. "
+                "Sempre que possível, cite artigos relevantes no formato: 'Artigo [n.º] do [Código] - [Título]'. "
+                "Se não encontrar dados suficientes, ofereça uma explicação geral baseada em conhecimento jurídico comum, e indique que o utilizador deve procurar aconselhamento profissional. "
+                "Evite estruturas como múltipla escolha, 'Sim/Não', ou tokens técnicos como [INST]. "
+                "Responda com clareza, em linguagem natural e acessível. "
+                "No fim, adicione esta nota obrigatória: "
+                "> Esta resposta foi gerada por um Assistente de IA. Para aconselhamento jurídico definitivo, consulte um advogado."
+            ),
+            HumanMessagePromptTemplate.from_template(
+                "Contexto:\n{context}\n\nPergunta do Utilizador:\n{input}\n\n{agent_scratchpad}"
+            )
+        ])
 
         llm = ChatOpenAI(
             api_key=OPENAI_API_KEY,
             base_url=BASE_URL,
-            model="RichardErkhov/mistralai_-_Mistral-7B-Instruct-v0.3-gguf",
-            temperature=0.0,
-            frequency_penalty=0.2,
-            presence_penalty=0.0
+            model="TheBloke/zephyr-7B-beta-GGUF",
+            temperature=0.7,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+            max_tokens=2048
         )
 
-        agent = create_openai_tools_agent(llm=llm, tools=tools, prompt=prompt_template)
+        agent = create_openai_tools_agent(llm=llm, tools=tools, prompt=prompt)
         agent_executor = AgentExecutor(agent=agent, tools=tools)
 
         retrieved_docs = tool.invoke(user_input)
-        context = "".join([doc for doc in retrieved_docs])
+        context = "\n\n".join(
+            doc.page_content.strip()[:1000]
+            for doc in retrieved_docs
+            if hasattr(doc, 'page_content') and doc.page_content
+        )
 
         result = agent_executor.invoke({"input": user_input,"context": context, "agent_scratchpad": ""})
         response = result["output"]
@@ -135,7 +128,7 @@ def get_ai_response(user_input: str):
     
     except Exception as e:
         logging.error(f"Error initializing the system: {e}")
-        return f"Error: {e}", []
+        return f"Error: {e}"
     
     finally:
         if session:
