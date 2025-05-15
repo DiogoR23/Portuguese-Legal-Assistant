@@ -17,14 +17,14 @@ import re
 class IntentDetector:
     def __init__(self):
         self.greetings = [
-            'olá', 'bom dia', 'boa tarde', 'boa noite', 'tudo bem', 'oi', 'boas', 'ola'
+            'olá', 'bom dia', 'boa tarde', 'boa noite', 'tudo bem', 'oi', 'boas', 'ola', 'como estas'
         ]
 
         self.legal_keywords = [
             "artigo", "lei", "código", "direito", "obrigação", "contrato", "responsabilidade", "testamento",
             "herança", "divórcio", "casamento", "sucessão", "penal", "civil", "trabalho", "constituição",
             "empresa", "negócio", "sociedade", "tributário", "impostos", "regulamentação", "licenciamento",
-            "jurisprudência", "rendimentos", "contratual"
+            "jurisprudência", "rendimentos", "contratual", "legislação", "deveres", "processo"
         ]
 
         self.legal_patterns = [
