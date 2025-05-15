@@ -31,7 +31,7 @@ def bm25_Retriever(session, keyspace):
         ]
 
         retriever_bm25 = BM25Retriever.from_documents(documents=docs)
-        retriever_bm25.k = 2
+        retriever_bm25.k = 5
 
         return retriever_bm25
 
@@ -43,7 +43,7 @@ def bm25_Retriever(session, keyspace):
 def hybrid_retriever(session, vstore, keyspace):
     try:
         retriever_bm25 = bm25_Retriever(session=session, keyspace=keyspace)
-        vstore_retriever = vstore.as_retriever(search_kwargs={"k": 1})
+        vstore_retriever = vstore.as_retriever(search_kwargs={"k": 3})
 
         hybrid_retriever = EnsembleRetriever(
             retrievers=[retriever_bm25, vstore_retriever],
@@ -51,7 +51,7 @@ def hybrid_retriever(session, vstore, keyspace):
         )
 
         return hybrid_retriever
-    
+
     except Exception as e:
         logging.error(f"Error creating Hybrid Retriever: {e}")
         return None
@@ -72,7 +72,7 @@ def rag_tool(session, name, keyspace, description, vstore):
         )
 
         return tool
-    
+
     except Exception as e:
         logging.info(f"Error creating retriever tool: {e}")
         return None
