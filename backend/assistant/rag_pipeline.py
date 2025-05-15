@@ -31,7 +31,7 @@ def bm25_Retriever(session, keyspace):
         ]
 
         retriever_bm25 = BM25Retriever.from_documents(documents=docs)
-        retriever_bm25.k = 30
+        retriever_bm25.k = 2
 
         return retriever_bm25
 
@@ -43,7 +43,7 @@ def bm25_Retriever(session, keyspace):
 def hybrid_retriever(session, vstore, keyspace):
     try:
         retriever_bm25 = bm25_Retriever(session=session, keyspace=keyspace)
-        vstore_retriever = vstore.as_retriever(search_kwargs={"k": 20})
+        vstore_retriever = vstore.as_retriever(search_kwargs={"k": 1})
 
         hybrid_retriever = EnsembleRetriever(
             retrievers=[retriever_bm25, vstore_retriever],
