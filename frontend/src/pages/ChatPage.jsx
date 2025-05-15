@@ -82,7 +82,10 @@ const ChatPage = () => {
     try {
       const res = await fetchConversationMessages(id);
       setConversationId(id);
-      const msgs = res.data;
+
+      // Ordenar a data das mensagens
+      const msgs = res.data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
       const hasWelcome = msgs.some(
         (msg) => msg.role === 'assistant' && msg.content.includes('Em que posso ajudar-te')
       );
@@ -110,6 +113,15 @@ const ChatPage = () => {
           message: userMessage.content,
           ...(conversationId && { conversation_id: conversationId }),
         }, abortCtrl);
+      
+      if (
+        !res?.data ||
+        !res.data.message ||
+        !Array.isArray(res.data.message) ||
+        !res.data.conversation_id
+      ) {
+        throw new Error("Resposta malformada do servidor.");
+      }
 
       const { message: returnedMessages, conversation_id } = res.data;
       setConversationId(conversation_id);
