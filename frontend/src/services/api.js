@@ -25,20 +25,16 @@ export const getUserInfo = () => API.get('protected/');
 
 
 // AI Connection
-export const sendMessage = (payload, controller) =>
-    fetch("http://localhost:8000/api/ai/chat/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("access")}`,
-      },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    }).then(async (res) => {
-      if (!res.ok) throw new Error("Erro na resposta do servidor");
-      const data = await res.json();
-      return data;
-    });
+export const sendMessage = (payload, controller) => {
+  const token = localStorage.getItem("access");
+  if (!token) {
+    return Promise.reject(new Error("Token não encontrado. Faz login novamente."));
+  }
+
+  return API.post("ai/chat/", payload, {
+    signal: controller?.signal,
+  });
+};
 
 export const fetchUserConversations = () => API.get("ai/conversations/");
 
