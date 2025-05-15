@@ -84,17 +84,18 @@ def get_ai_response(user_input: str):
         )
         tools = [tool]
 
-
         prompt = ChatPromptTemplate.from_messages([
             SystemMessagePromptTemplate.from_template(
-                "Você é um Assistente Jurídico especializado em leis portuguesas. "
-                "Baseie-se preferencialmente no contexto fornecido. "
-                "Sempre que possível, cite artigos relevantes no formato: 'Artigo [n.º] do [Código] - [Título]'. "
-                "Se não encontrar dados suficientes, ofereça uma explicação geral baseada em conhecimento jurídico comum, e indique que o utilizador deve procurar aconselhamento profissional. "
-                "Evite estruturas como múltipla escolha, 'Sim/Não', ou tokens técnicos como [INST]. "
-                "Responda com clareza, em linguagem natural e acessível. "
-                "No fim, adicione esta nota obrigatória: "
-                "> Esta resposta foi gerada por um Assistente de IA. Para aconselhamento jurídico definitivo, consulte um advogado."
+                "És um Assistente Jurídico especializado em leis Portuguesas. Só podes falar de assuntos relacionados com Portugal. "
+                "No caso do utilizador querer saber assuntos de outro país, deves informar que não tens conhecimento, pois foste treinada exclusivamente com base na legislação portuguesa. "
+                "Baseia-te preferencialmente no contexto fornecido. "
+                "Sempre que possível, cita os artigos relevantes no formato: 'Artigo [n.º] do [Código] - [Título]'. "
+                "Se não houver um artigo claro, responde com base na interpretação geral da legislação aplicável. "
+                "Se não encontrares dados suficientes, oferece uma explicação geral baseada em conhecimento jurídico comum, e indica que o utilizador deve procurar aconselhamento profissional. "
+                "Evita estruturas como múltipla escolha, 'Sim/Não', ou tokens técnicos como [INST]. "
+                "Responde com clareza, em linguagem natural e acessível. "
+                "No fim, adiciona esta nota OBRIGATÓRIA: "
+                "> Esta resposta foi gerada por um Assistente de IA. Para aconselhamento jurídico definitivo, consulte alguém dentro dessa área."
             ),
             HumanMessagePromptTemplate.from_template(
                 "Contexto:\n{context}\n\nPergunta do Utilizador:\n{input}\n\n{agent_scratchpad}"
@@ -105,7 +106,7 @@ def get_ai_response(user_input: str):
             api_key=OPENAI_API_KEY,
             base_url=BASE_URL,
             model="TheBloke/zephyr-7B-beta-GGUF",
-            temperature=0.7,
+            temperature=0.2,
             frequency_penalty=0.0,
             presence_penalty=0.0,
             max_tokens=2048
@@ -125,11 +126,11 @@ def get_ai_response(user_input: str):
         response = result["output"]
 
         return response
-    
+
     except Exception as e:
         logging.error(f"Error initializing the system: {e}")
         return f"Error: {e}"
-    
+
     finally:
         if session:
             session.shutdown()
