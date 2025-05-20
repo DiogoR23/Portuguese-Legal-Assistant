@@ -1,0 +1,40 @@
+# Docker Compose file for setting up Cassandra and PostgreSQL containers
+# This file is used to define and run multi-container Docker applications.
+# It specifies the services, networks, and volumes required for the application.
+# The Cassandra service is configured to use a custom configuration file and bind mounts for data persistence.
+# The PostgreSQL service is configured with environment variables for database initialization and uses a named volume for data persistence.
+# The PostgreSQL service is connected to a custom network for inter-container communication.
+# The Cassandra service exposes ports for JMX, internode communication, and CQL clients.
+
+services:
+  cassandra:
+    image: cassandra:5.0
+    command: ["cassandra", "-f", "-Dcassandra.config=/etc/cassandra/cassandra-custom.yaml"]
+    ports:
+      - "7199:7199"
+      - "7001:7001"
+      - "9042:9042"
+    volumes:
+      - "C:/cassandra_data:/var/lib/cassandra"
+      - type: bind
+        source: ./cassandra_docker.yaml
+        target: /etc/cassandra/cassandra-custom.yaml
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ptlaws-network
+
+volumes:
+  postgres_data:
+
+networks:
+  ptlaws-network:
