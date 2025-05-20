@@ -116,4 +116,5 @@ This project is licensed under the MIT License.
 ## Author
 
 Diogo Gonçalves Rodrigues
+
 Bachelor's in Data Science, Catholic University of Portugal - Braga
