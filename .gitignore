@@ -22,7 +22,6 @@ playwright/.cache/
 playwright/.local-browsers/
 
 # Cassandra Files
-cassandra_docker.yaml
 cassandra/data/
 cassandra/commitlog/
 cassandra/saved_caches/
@@ -30,9 +29,6 @@ data
 
 # VSCode Files
 .vscode/
-
-# Docker Files
-docker-compose.yml
 
 # Environment Files
 .env
