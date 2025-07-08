@@ -105,7 +105,6 @@ Only authenticated users can access the chatbot. The system supports:
 
 ## Acknowledgements
 
-- Special thanks to ChatGPT for assisting in writing documentation and improving interface ideas during the development phase.
 - Legal data sourced from the Diário da República Eletrónico (dre.pt)
 - LLM stack inspired by open-source RAG pipelines and LangChain examples.
 
