@@ -86,7 +86,7 @@ SECRET_KEY = ""
 ## Authentication
 
 Only authenticated users can access the chatbot. The system supports:
-- Register/Login via username and email;
+- Register/Login via email and password;
 - Persistent session storage using tokens (JWT);
 - (Future Work) OAuth via google & password recovery;
 
