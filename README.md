@@ -116,7 +116,11 @@ Only authenticated users can access the chatbot. The system supports:
 ## License
 This project is licensed under the MIT License.
 
-## Author
+## Disclaimer
+This project uses publicly available legal data from official sources (Diário da República Eletrónico).  
+The information provided is for informational purposes only and should not be considered legal advice.  
+Users are responsible for verifying the accuracy and applicability of the content.
 
+## Author
 - Diogo Gonçalves Rodrigues
 - Bachelor's in Data Science, Catholic University of Portugal - Braga
