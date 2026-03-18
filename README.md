@@ -50,8 +50,11 @@ This project was developed as part of a final year bachelor's degree in Data Sci
 ---
 
 ## Local Setup
-> This setup assumes you are running the LLM locally and have your backend and database containers ready via Docker.
+> This setup assumes you are running a local LLM using LM Studio (including embedding models) and have your backend and database containers ready via Docker.
 
+Recommended models:
+- LLM: TheBloke/zephyr-7B-beta-GGUF
+- Embeddings: nomic-ai/nomic-embed-text-v1.5-GGUF
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/DiogoR23/ai-assistant-project
