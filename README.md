@@ -1,4 +1,4 @@
-# Amel.IA – Portuguese Legal Assistant
+# Amel.IA – Portuguese Legal Assistant (RAG-based LLM system)
 Amel.IA is designed to simplify access to Portuguese legal information, enabling users to quickly understand laws and regulations without requiring legal expertise.
 
 It is a privacy-focused, open-source AI assistant powered by a locally hosted LLM using LM Studio, combined with a Retrieval-Augmented Generation (RAG) pipeline to deliver accurate answers from official legal sources such as the Diário da República Eletrónico (DRE).
